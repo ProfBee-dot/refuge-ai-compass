@@ -1,5 +1,5 @@
 
-import { Globe, Bell, User } from "lucide-react";
+import { Globe, Bell, User, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
