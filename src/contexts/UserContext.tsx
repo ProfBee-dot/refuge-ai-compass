@@ -1,5 +1,12 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createClient } from '@supabase/supabase-js';
+import { useToast } from '@/hooks/use-toast';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 export type UserRole = 'admin' | 'user' | 'volunteer' | 'donor';
 
@@ -15,14 +22,16 @@ export interface User {
 
 interface UserContextType {
   user: User | null;
-  login: (userData: User) => void;
-  logout: () => void;
-  updateUser: (userData: Partial<User>) => void;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => Promise<void>;
+  signUp: (email: string, password: string, name: string, organization?: string) => Promise<boolean>;
+  updateUser: (userData: Partial<User>) => Promise<void>;
   isAdmin: boolean;
   isDonor: boolean;
   isVolunteer: boolean;
   isLoggedIn: boolean;
   hasPermission: (requiredRole: UserRole | UserRole[]) => boolean;
+  loading: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -40,27 +49,200 @@ interface UserProviderProps {
 }
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<User | null>(() => {
-    const savedUser = localStorage.getItem('refugeeai_user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
-  const login = (userData: User) => {
-    // Additional security validation could be added here
-    setUser(userData);
-    localStorage.setItem('refugeeai_user', JSON.stringify(userData));
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setLoading(false);
+      }
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        await fetchUserProfile(session.user.id);
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching user profile:', error);
+        setLoading(false);
+        return;
+      }
+
+      if (data) {
+        setUser({
+          id: data.id,
+          name: data.full_name || data.email,
+          email: data.email,
+          role: data.role as UserRole,
+          avatar: data.avatar_url,
+          organization: data.organization,
+          verified: data.verified,
+        });
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      setLoading(false);
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('refugeeai_user');
+  const login = async (email: string, password: string): Promise<boolean> => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast({
+          title: "Authentication Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return false;
+      }
+
+      if (data.user) {
+        await fetchUserProfile(data.user.id);
+        toast({
+          title: "Welcome back!",
+          description: "Successfully logged in.",
+        });
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Login error:', error);
+      toast({
+        title: "Login Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+      return false;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const updateUser = (userData: Partial<User>) => {
-    if (user) {
-      const updatedUser = { ...user, ...userData };
-      setUser(updatedUser);
-      localStorage.setItem('refugeeai_user', JSON.stringify(updatedUser));
+  const signUp = async (email: string, password: string, name: string, organization?: string): Promise<boolean> => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast({
+          title: "Registration Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return false;
+      }
+
+      if (data.user) {
+        // Create user profile
+        const { error: profileError } = await supabase
+          .from('user_profiles')
+          .insert({
+            id: data.user.id,
+            email: data.user.email,
+            full_name: name,
+            role: 'user',
+            organization: organization,
+            verified: false,
+          });
+
+        if (profileError) {
+          console.error('Error creating user profile:', profileError);
+        }
+
+        toast({
+          title: "Registration successful!",
+          description: "Please check your email to verify your account.",
+        });
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Sign up error:', error);
+      toast({
+        title: "Registration Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      toast({
+        title: "Signed out",
+        description: "You have been successfully signed out.",
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  const updateUser = async (userData: Partial<User>) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({
+          full_name: userData.name,
+          organization: userData.organization,
+          avatar_url: userData.avatar,
+        })
+        .eq('id', user.id);
+
+      if (error) {
+        toast({
+          title: "Update Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setUser({ ...user, ...userData });
+      toast({
+        title: "Profile Updated",
+        description: "Your profile has been successfully updated.",
+      });
+    } catch (error) {
+      console.error('Update user error:', error);
     }
   };
 
@@ -82,12 +264,14 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         user,
         login,
         logout,
+        signUp,
         updateUser,
         isAdmin,
         isDonor,
         isVolunteer,
         isLoggedIn,
         hasPermission,
+        loading,
       }}
     >
       {children}

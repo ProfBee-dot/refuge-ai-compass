@@ -1,14 +1,15 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Bot, User, Mic, Globe, Heart } from "lucide-react";
+import { Send, Bot, User, Mic, Heart, Loader2 } from "lucide-react";
+import { useSupabase } from "@/hooks/useSupabase";
+import { useUser } from "@/contexts/UserContext";
 
 interface Message {
-  id: number;
+  id: string;
   type: 'user' | 'bot';
   content: string;
   timestamp: Date;
@@ -16,18 +17,14 @@ interface Message {
 }
 
 export const ChatbotInterface = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      type: 'bot',
-      content: "Hello! I'm your AI assistant for refugee support. I can help you register your needs, find resources, or connect you with support services. How can I assist you today?",
-      timestamp: new Date(),
-      language: 'en'
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [loading, setLoading] = useState(true);
+
+  const { getChatHistory, saveChatMessage } = useSupabase();
+  const { user } = useUser();
 
   const languages = [
     { code: "en", name: "English" },
@@ -47,30 +44,98 @@ export const ChatbotInterface = () => {
     "Emergency help"
   ];
 
-  const handleSendMessage = () => {
+  useEffect(() => {
+    loadChatHistory();
+  }, [user]);
+
+  const loadChatHistory = async () => {
+    if (!user) {
+      setMessages([getWelcomeMessage()]);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const history = await getChatHistory();
+      const formattedMessages: Message[] = [];
+      
+      // Add welcome message
+      formattedMessages.push(getWelcomeMessage());
+      
+      // Add chat history
+      history?.forEach((chat: any) => {
+        formattedMessages.push({
+          id: `user-${chat.id}`,
+          type: 'user',
+          content: chat.message,
+          timestamp: new Date(chat.created_at),
+        });
+        
+        if (chat.response) {
+          formattedMessages.push({
+            id: `bot-${chat.id}`,
+            type: 'bot',
+            content: chat.response,
+            timestamp: new Date(chat.created_at),
+            language: chat.language,
+          });
+        }
+      });
+      
+      setMessages(formattedMessages);
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+      setMessages([getWelcomeMessage()]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getWelcomeMessage = (): Message => ({
+    id: 'welcome',
+    type: 'bot',
+    content: user 
+      ? `Hello ${user.name}! I'm your AI assistant for refugee support. I can help you register your needs, find resources, or connect you with support services. How can I assist you today?`
+      : "Hello! I'm your AI assistant for refugee support. I can help you register your needs, find resources, or connect you with support services. Please sign in to save your conversation history. How can I assist you today?",
+    timestamp: new Date(),
+    language: 'en'
+  });
+
+  const handleSendMessage = async () => {
     if (inputMessage.trim()) {
-      const newMessage: Message = {
-        id: messages.length + 1,
+      const userMessage: Message = {
+        id: `user-${Date.now()}`,
         type: 'user',
         content: inputMessage,
         timestamp: new Date()
       };
 
-      setMessages(prev => [...prev, newMessage]);
+      setMessages(prev => [...prev, userMessage]);
       setInputMessage("");
       setIsTyping(true);
 
       // Simulate bot response
-      setTimeout(() => {
-        const botResponse: Message = {
-          id: messages.length + 2,
+      setTimeout(async () => {
+        const botResponse = getBotResponse(inputMessage);
+        const botMessage: Message = {
+          id: `bot-${Date.now()}`,
           type: 'bot',
-          content: getBotResponse(inputMessage),
+          content: botResponse,
           timestamp: new Date(),
           language: selectedLanguage
         };
-        setMessages(prev => [...prev, botResponse]);
+        
+        setMessages(prev => [...prev, botMessage]);
         setIsTyping(false);
+
+        // Save to database if user is logged in
+        if (user) {
+          try {
+            await saveChatMessage(inputMessage, botResponse);
+          } catch (error) {
+            console.error('Error saving chat message:', error);
+          }
+        }
       }, 1500);
     }
   };
@@ -97,8 +162,16 @@ export const ChatbotInterface = () => {
 
   const handleQuickAction = (action: string) => {
     setInputMessage(action);
-    handleSendMessage();
+    setTimeout(() => handleSendMessage(), 100);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -131,6 +204,11 @@ export const ChatbotInterface = () => {
             <CardTitle className="flex items-center space-x-2">
               <Bot className="w-5 h-5 text-blue-500" />
               <span>Chat Assistant</span>
+              {!user && (
+                <Badge variant="outline" className="text-xs">
+                  Sign in to save history
+                </Badge>
+              )}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">

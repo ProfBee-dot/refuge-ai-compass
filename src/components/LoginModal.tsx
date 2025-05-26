@@ -9,10 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { useUser, User, UserRole } from '@/contexts/UserContext';
-import { Heart, Shield, Users, DollarSign, Eye, EyeOff } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useUser } from '@/contexts/UserContext';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -28,94 +26,45 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     password: '',
     organization: '',
   });
-  const { login } = useUser();
-  const { toast } = useToast();
-
-  // Demo credentials for different roles
-  const demoCredentials = {
-    admin: { email: 'admin@refugeeai.org', password: 'admin123' },
-    volunteer: { email: 'volunteer@refugeeai.org', password: 'volunteer123' },
-    donor: { email: 'donor@refugeeai.org', password: 'donor123' },
-    user: { email: 'refugee@refugeeai.org', password: 'user123' }
-  };
+  const { login, signUp, loading } = useUser();
 
   const resetForm = () => {
     setFormData({ name: '', email: '', password: '', organization: '' });
     setShowPassword(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    let success = false;
     if (isLogin) {
-      // Authenticate user
-      let authenticatedRole: UserRole | null = null;
-      let userName = '';
-      
-      // Check credentials against demo accounts
-      for (const [role, credentials] of Object.entries(demoCredentials)) {
-        if (formData.email === credentials.email && formData.password === credentials.password) {
-          authenticatedRole = role as UserRole;
-          userName = role === 'admin' ? 'Admin User' : 
-                   role === 'volunteer' ? 'Volunteer User' :
-                   role === 'donor' ? 'Donor User' : 'Refugee User';
-          break;
-        }
-      }
-      
-      if (!authenticatedRole) {
-        toast({
-          title: "Authentication Failed",
-          description: "Invalid email or password. Please try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const userData: User = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: userName,
-        email: formData.email,
-        role: authenticatedRole,
-        organization: authenticatedRole === 'admin' ? 'RefugeeAI' : formData.organization || undefined,
-        verified: true,
-      };
-
-      login(userData);
-      toast({
-        title: "Welcome back!",
-        description: `Successfully logged in as ${authenticatedRole}.`,
-      });
-      resetForm();
-      onClose();
+      success = await login(formData.email, formData.password);
     } else {
-      // Registration (simplified for demo)
-      const userData: User = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: formData.name,
-        email: formData.email,
-        role: 'user', // New registrations default to user role
-        organization: formData.organization || undefined,
-        verified: false,
-      };
+      success = await signUp(formData.email, formData.password, formData.name, formData.organization);
+    }
 
-      login(userData);
-      toast({
-        title: "Registration successful!",
-        description: "Your account has been created. Verification may be required for certain features.",
-      });
+    if (success) {
       resetForm();
       onClose();
     }
   };
 
-  const fillDemoCredentials = (role: UserRole) => {
-    const credentials = demoCredentials[role];
-    setFormData({
-      ...formData,
-      email: credentials.email,
-      password: credentials.password
-    });
+  // Test account credentials helper
+  const fillTestCredentials = (role: string) => {
+    const credentials = {
+      admin: { email: 'admin@refugeeai.org', password: 'admin123' },
+      volunteer: { email: 'volunteer@refugeeai.org', password: 'volunteer123' },
+      donor: { email: 'donor@refugeeai.org', password: 'donor123' },
+      user: { email: 'user@refugeeai.org', password: 'user123' }
+    };
+    const cred = credentials[role as keyof typeof credentials];
+    if (cred) {
+      setFormData({
+        ...formData,
+        email: cred.email,
+        password: cred.password
+      });
+    }
   };
 
   return (
@@ -195,54 +144,61 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
           
           {isLogin && (
             <div>
-              <Label className="text-sm font-medium">Demo Accounts</Label>
+              <Label className="text-sm font-medium">Test Accounts</Label>
               <div className="grid grid-cols-2 gap-2 mt-2">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => fillDemoCredentials('user')}
-                  className="flex items-center space-x-1"
+                  onClick={() => fillTestCredentials('user')}
+                  className="text-xs"
                 >
-                  <Heart className="w-3 h-3" />
-                  <span className="text-xs">User</span>
+                  User Test
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => fillDemoCredentials('volunteer')}
-                  className="flex items-center space-x-1"
+                  onClick={() => fillTestCredentials('volunteer')}
+                  className="text-xs"
                 >
-                  <Users className="w-3 h-3" />
-                  <span className="text-xs">Volunteer</span>
+                  Volunteer Test
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => fillDemoCredentials('donor')}
-                  className="flex items-center space-x-1"
+                  onClick={() => fillTestCredentials('donor')}
+                  className="text-xs"
                 >
-                  <DollarSign className="w-3 h-3" />
-                  <span className="text-xs">Donor</span>
+                  Donor Test
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => fillDemoCredentials('admin')}
-                  className="flex items-center space-x-1 border-red-200 text-red-600 hover:bg-red-50"
+                  onClick={() => fillTestCredentials('admin')}
+                  className="text-xs border-red-200 text-red-600 hover:bg-red-50"
                 >
-                  <Shield className="w-3 h-3" />
-                  <span className="text-xs">Admin</span>
+                  Admin Test
                 </Button>
               </div>
             </div>
           )}
           
-          <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 hover:scale-105">
-            {isLogin ? 'Sign In' : 'Create Account'}
+          <Button 
+            type="submit" 
+            className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 hover:scale-105"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {isLogin ? 'Signing In...' : 'Creating Account...'}
+              </>
+            ) : (
+              isLogin ? 'Sign In' : 'Create Account'
+            )}
           </Button>
           
           <div className="text-center">

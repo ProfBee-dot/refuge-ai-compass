@@ -1,62 +1,101 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, DollarSign, Users, Calendar, Target, TrendingUp } from "lucide-react";
+import { Plus, DollarSign, Users, Target, TrendingUp, Loader2 } from "lucide-react";
+import { useSupabase } from "@/hooks/useSupabase";
+import { useToast } from "@/hooks/use-toast";
 
 interface Campaign {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  target: number;
-  raised: number;
-  donors: number;
-  daysLeft: number;
+  target_amount: number;
+  raised_amount: number;
+  donor_count: number;
+  days_left: number;
   status: 'active' | 'completed' | 'urgent';
   category: string;
+  created_at: string;
 }
 
 export const FundraisingCampaigns = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [campaigns] = useState<Campaign[]>([
-    {
-      id: 1,
-      title: "Emergency Medical Supplies for Syrian Families",
-      description: "Urgent medical supplies needed for 200 families in refugee camps",
-      target: 50000,
-      raised: 32500,
-      donors: 127,
-      daysLeft: 12,
-      status: 'urgent',
-      category: 'Medical'
-    },
-    {
-      id: 2,
-      title: "Education Support for Refugee Children",
-      description: "School supplies and educational materials for displaced children",
-      target: 25000,
-      raised: 18750,
-      donors: 89,
-      daysLeft: 25,
-      status: 'active',
-      category: 'Education'
-    },
-    {
-      id: 3,
-      title: "Winter Clothing Distribution",
-      description: "Warm clothing for families facing harsh winter conditions",
-      target: 35000,
-      raised: 35000,
-      donors: 156,
-      daysLeft: 0,
-      status: 'completed',
-      category: 'Clothing'
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    target_amount: '',
+    category: 'Medical',
+    days_left: '30'
+  });
+
+  const { getCampaigns, createCampaign } = useSupabase();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    loadCampaigns();
+  }, []);
+
+  const loadCampaigns = async () => {
+    try {
+      const data = await getCampaigns();
+      setCampaigns(data || []);
+    } catch (error) {
+      console.error('Error loading campaigns:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load campaigns",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
+
+  const handleCreateCampaign = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      await createCampaign({
+        title: formData.title,
+        description: formData.description,
+        target_amount: parseFloat(formData.target_amount),
+        category: formData.category,
+        days_left: parseInt(formData.days_left),
+      });
+
+      toast({
+        title: "Success",
+        description: "Campaign created successfully!",
+      });
+
+      setFormData({
+        title: '',
+        description: '',
+        target_amount: '',
+        category: 'Medical',
+        days_left: '30'
+      });
+      setShowCreateForm(false);
+      loadCampaigns();
+    } catch (error) {
+      console.error('Error creating campaign:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create campaign",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -68,11 +107,19 @@ export const FundraisingCampaigns = () => {
   };
 
   const totalStats = {
-    totalRaised: campaigns.reduce((sum, campaign) => sum + campaign.raised, 0),
-    totalTarget: campaigns.reduce((sum, campaign) => sum + campaign.target, 0),
-    totalDonors: campaigns.reduce((sum, campaign) => sum + campaign.donors, 0),
+    totalRaised: campaigns.reduce((sum, campaign) => sum + (campaign.raised_amount || 0), 0),
+    totalTarget: campaigns.reduce((sum, campaign) => sum + campaign.target_amount, 0),
+    totalDonors: campaigns.reduce((sum, campaign) => sum + (campaign.donor_count || 0), 0),
     activeCampaigns: campaigns.filter(c => c.status === 'active' || c.status === 'urgent').length
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -144,46 +191,87 @@ export const FundraisingCampaigns = () => {
           <CardHeader>
             <CardTitle>Create New Campaign</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Campaign Title</label>
-                <Input placeholder="Enter campaign title" />
+          <CardContent>
+            <form onSubmit={handleCreateCampaign} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Campaign Title</label>
+                  <Input 
+                    placeholder="Enter campaign title" 
+                    value={formData.title}
+                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Funding Target ($)</label>
+                  <Input 
+                    type="number" 
+                    placeholder="50000"
+                    value={formData.target_amount}
+                    onChange={(e) => setFormData({...formData, target_amount: e.target.value})}
+                    required
+                  />
+                </div>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Funding Target ($)</label>
-                <Input type="number" placeholder="50000" />
+                <label className="block text-sm font-medium mb-2">Description</label>
+                <Textarea 
+                  placeholder="Describe the campaign purpose and impact..." 
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  required
+                />
               </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Description</label>
-              <Textarea placeholder="Describe the campaign purpose and impact..." rows={3} />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Category</label>
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                  <option>Medical</option>
-                  <option>Education</option>
-                  <option>Food</option>
-                  <option>Shelter</option>
-                  <option>Clothing</option>
-                  <option>Emergency</option>
-                </select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Category</label>
+                  <select 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                    value={formData.category}
+                    onChange={(e) => setFormData({...formData, category: e.target.value})}
+                  >
+                    <option value="Medical">Medical</option>
+                    <option value="Education">Education</option>
+                    <option value="Food">Food</option>
+                    <option value="Shelter">Shelter</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Emergency">Emergency</option>
+                    <option value="Legal">Legal</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Duration (days)</label>
+                  <Input 
+                    type="number" 
+                    placeholder="30"
+                    value={formData.days_left}
+                    onChange={(e) => setFormData({...formData, days_left: e.target.value})}
+                    required
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Duration (days)</label>
-                <Input type="number" placeholder="30" />
+              <div className="flex space-x-3">
+                <Button 
+                  type="submit"
+                  className="bg-gradient-to-r from-green-500 to-green-600"
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    'Create Campaign'
+                  )}
+                </Button>
+                <Button variant="outline" onClick={() => setShowCreateForm(false)}>
+                  Cancel
+                </Button>
               </div>
-            </div>
-            <div className="flex space-x-3">
-              <Button className="bg-gradient-to-r from-green-500 to-green-600">
-                Create Campaign
-              </Button>
-              <Button variant="outline" onClick={() => setShowCreateForm(false)}>
-                Cancel
-              </Button>
-            </div>
+            </form>
           </CardContent>
         </Card>
       )}
@@ -191,7 +279,7 @@ export const FundraisingCampaigns = () => {
       {/* Campaign List */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {campaigns.map((campaign) => {
-          const progressPercentage = (campaign.raised / campaign.target) * 100;
+          const progressPercentage = (campaign.raised_amount / campaign.target_amount) * 100;
           
           return (
             <Card key={campaign.id} className="hover:shadow-lg transition-shadow">
@@ -211,7 +299,7 @@ export const FundraisingCampaigns = () => {
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm font-medium">Progress</span>
                     <span className="text-sm text-gray-600">
-                      ${campaign.raised.toLocaleString()} / ${campaign.target.toLocaleString()}
+                      ${(campaign.raised_amount || 0).toLocaleString()} / ${campaign.target_amount.toLocaleString()}
                     </span>
                   </div>
                   <Progress value={progressPercentage} className="h-3" />
@@ -222,12 +310,12 @@ export const FundraisingCampaigns = () => {
                 
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <p className="text-lg font-bold text-blue-600">{campaign.donors}</p>
+                    <p className="text-lg font-bold text-blue-600">{campaign.donor_count || 0}</p>
                     <p className="text-xs text-gray-600">Donors</p>
                   </div>
                   <div>
                     <p className="text-lg font-bold text-green-600">
-                      {campaign.daysLeft === 0 ? 'Ended' : `${campaign.daysLeft}d`}
+                      {campaign.days_left === 0 ? 'Ended' : `${campaign.days_left}d`}
                     </p>
                     <p className="text-xs text-gray-600">Days Left</p>
                   </div>
