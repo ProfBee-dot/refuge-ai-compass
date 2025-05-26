@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageCircle, Upload, FileText, Heart, Languages, User, AlertTriangle } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
+import { ChatbotInterface } from "@/components/ChatbotInterface";
+import { AidRequestForm } from "@/components/AidRequestForm";
+import { DocumentUpload } from "@/components/DocumentUpload";
 
 export const RefugeePortal = () => {
   const { user } = useUser();
@@ -31,7 +33,7 @@ export const RefugeePortal = () => {
   ];
 
   return (
-    <div className="space-y-6 p-4 max-w-4xl mx-auto">
+    <div className="space-y-6 p-4 max-w-6xl mx-auto">
       {/* Header with Language Toggle */}
       <div className="flex items-center justify-between">
         <div>
@@ -52,38 +54,13 @@ export const RefugeePortal = () => {
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-          <CardContent className="p-4 text-center">
-            <MessageCircle className="w-8 h-8 mx-auto text-blue-500 mb-2" />
-            <h3 className="font-semibold">24/7 Chat Support</h3>
-            <p className="text-sm text-gray-600">Get immediate assistance</p>
-          </CardContent>
-        </Card>
-        
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-          <CardContent className="p-4 text-center">
-            <FileText className="w-8 h-8 mx-auto text-green-500 mb-2" />
-            <h3 className="font-semibold">Request Aid</h3>
-            <p className="text-sm text-gray-600">Submit assistance requests</p>
-          </CardContent>
-        </Card>
-        
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-          <CardContent className="p-4 text-center">
-            <Upload className="w-8 h-8 mx-auto text-purple-500 mb-2" />
-            <h3 className="font-semibold">Upload Documents</h3>
-            <p className="text-sm text-gray-600">Secure document center</p>
-          </CardContent>
-        </Card>
-      </div>
-
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="requests">My Requests</TabsTrigger>
-          <TabsTrigger value="campaigns">Aid Campaigns</TabsTrigger>
+          <TabsTrigger value="chat">Chat Support</TabsTrigger>
+          <TabsTrigger value="request">Request Aid</TabsTrigger>
+          <TabsTrigger value="documents">Documents</TabsTrigger>
+          <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
           <TabsTrigger value="profile">Profile</TabsTrigger>
         </TabsList>
 
@@ -139,36 +116,16 @@ export const RefugeePortal = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="requests" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>My Aid Requests</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {urgentNeeds.map((need) => (
-                  <div key={need.id} className="p-4 border rounded-lg">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h4 className="font-semibold">{need.type}</h4>
-                        <p className="text-sm text-gray-600">{need.description}</p>
-                      </div>
-                      <Badge variant={need.priority === 'urgent' ? 'destructive' : need.priority === 'high' ? 'default' : 'secondary'}>
-                        {need.priority}
-                      </Badge>
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      {need.status}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-              <Button className="w-full mt-4">
-                <FileText className="w-4 h-4 mr-2" />
-                Submit New Request
-              </Button>
-            </CardContent>
-          </Card>
+        <TabsContent value="chat" className="space-y-4">
+          <ChatbotInterface />
+        </TabsContent>
+
+        <TabsContent value="request" className="space-y-4">
+          <AidRequestForm />
+        </TabsContent>
+
+        <TabsContent value="documents" className="space-y-4">
+          <DocumentUpload />
         </TabsContent>
 
         <TabsContent value="campaigns" className="space-y-4">

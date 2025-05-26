@@ -8,6 +8,7 @@ import { UserProvider } from "@/contexts/UserContext";
 import Index from "./pages/Index";
 import WorldView from "./pages/WorldView";
 import RefugeePortal from "./pages/RefugeePortal";
+import DonorPortal from "./pages/DonorPortal";
 import AdminPortal from "./pages/AdminPortal";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/world" element={<WorldView />} />
             <Route path="/refugee-portal" element={<RefugeePortal />} />
+            <Route path="/donor-portal" element={<DonorPortal />} />
             <Route path="/admin-portal" element={<AdminPortal />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

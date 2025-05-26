@@ -1,11 +1,13 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, DollarSign, Package, Users, MapPin, Calendar, Eye, Download, Shield } from "lucide-react";
+import { Heart, DollarSign, Package, Users, MapPin, Calendar, Eye, Download, Shield, Plus } from "lucide-react";
+import { CampaignCreation } from "./CampaignCreation";
+import { SmartFilter } from "./SmartFilter";
+import { WalletIntegration } from "./WalletIntegration";
 
 interface Donation {
   id: number;
@@ -128,13 +130,13 @@ export const DonorPortal = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Donor Transparency Portal</h2>
-          <p className="text-gray-600 mt-1">Track your impact with blockchain-verified transparency</p>
+          <h2 className="text-3xl font-bold text-gray-900">Donor Portal</h2>
+          <p className="text-gray-600 mt-1">Create campaigns, track impact, and manage donations</p>
         </div>
         <div className="flex items-center space-x-2">
           <Shield className="w-5 h-5 text-green-500" />
           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-            Blockchain Verified
+            Verified Donor
           </Badge>
         </div>
       </div>
@@ -161,12 +163,22 @@ export const DonorPortal = () => {
         })}
       </div>
 
-      <Tabs defaultValue="donations" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="discover" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="discover">Discover</TabsTrigger>
+          <TabsTrigger value="create">Create Campaign</TabsTrigger>
           <TabsTrigger value="donations">My Donations</TabsTrigger>
-          <TabsTrigger value="impact">Impact Tracking</TabsTrigger>
-          <TabsTrigger value="blockchain">Blockchain Ledger</TabsTrigger>
+          <TabsTrigger value="wallet">Wallet</TabsTrigger>
+          <TabsTrigger value="impact">Impact</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="discover" className="space-y-4">
+          <SmartFilter />
+        </TabsContent>
+
+        <TabsContent value="create" className="space-y-4">
+          <CampaignCreation />
+        </TabsContent>
 
         <TabsContent value="donations" className="space-y-4">
           <div className="grid grid-cols-1 gap-4">
@@ -220,6 +232,10 @@ export const DonorPortal = () => {
               </Card>
             ))}
           </div>
+        </TabsContent>
+
+        <TabsContent value="wallet" className="space-y-4">
+          <WalletIntegration />
         </TabsContent>
 
         <TabsContent value="impact" className="space-y-4">
