@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,8 +7,22 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, DollarSign, Package, Users, MapPin, Calendar, Eye, Download, Shield, Plus } from "lucide-react";
 import { CampaignCreation } from "./CampaignCreation";
-import { SmartFilter } from "./SmartFilter";
 import { WalletIntegration } from "./WalletIntegration";
+
+// Temporary placeholder for SmartFilter to isolate the Select error
+const SmartFilter = () => {
+  console.log("SmartFilter component rendered");
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Discover Campaigns</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-gray-600">Smart filtering feature coming soon...</p>
+      </CardContent>
+    </Card>
+  );
+};
 
 interface Donation {
   id: number;
@@ -28,6 +43,8 @@ interface ImpactMetric {
 }
 
 export const DonorPortal = () => {
+  console.log("DonorPortal component rendered");
+  
   const [donations] = useState<Donation[]>([
     {
       id: 1,
