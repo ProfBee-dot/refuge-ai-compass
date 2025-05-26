@@ -19,7 +19,10 @@ interface UserContextType {
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
   isAdmin: boolean;
+  isDonor: boolean;
+  isVolunteer: boolean;
   isLoggedIn: boolean;
+  hasPermission: (requiredRole: UserRole | UserRole[]) => boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -43,6 +46,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   });
 
   const login = (userData: User) => {
+    // Additional security validation could be added here
     setUser(userData);
     localStorage.setItem('refugeeai_user', JSON.stringify(userData));
   };
@@ -60,7 +64,16 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     }
   };
 
+  const hasPermission = (requiredRole: UserRole | UserRole[]): boolean => {
+    if (!user) return false;
+    
+    const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+    return roles.includes(user.role);
+  };
+
   const isAdmin = user?.role === 'admin';
+  const isDonor = user?.role === 'donor';
+  const isVolunteer = user?.role === 'volunteer';
   const isLoggedIn = !!user;
 
   return (
@@ -71,7 +84,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         logout,
         updateUser,
         isAdmin,
+        isDonor,
+        isVolunteer,
         isLoggedIn,
+        hasPermission,
       }}
     >
       {children}

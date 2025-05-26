@@ -7,6 +7,7 @@ interface MenuItem {
   id: string;
   label: string;
   icon: LucideIcon;
+  requiredRoles?: string[];
 }
 
 interface SidebarProps {
@@ -16,7 +17,13 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ activeTab, setActiveTab, menuItems }: SidebarProps) => {
-  const { user } = useUser();
+  const { user, hasPermission } = useUser();
+
+  // Filter menu items based on user permissions
+  const filteredMenuItems = menuItems.filter(item => {
+    if (!item.requiredRoles || item.requiredRoles.length === 0) return true;
+    return hasPermission(item.requiredRoles as any);
+  });
 
   return (
     <aside className="fixed left-0 top-20 h-[calc(100vh-5rem)] w-64 bg-white/80 backdrop-blur-sm border-r border-blue-100 p-4 animate-slide-in-left">
@@ -24,12 +31,17 @@ export const Sidebar = ({ activeTab, setActiveTab, menuItems }: SidebarProps) =>
         <div className="mb-6 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-100 animate-fade-in">
           <p className="text-sm text-gray-600">Welcome back,</p>
           <p className="font-semibold text-gray-900 truncate">{user.name}</p>
-          <p className="text-xs text-blue-600 capitalize">{user.role}</p>
+          <div className="flex items-center space-x-2 mt-1">
+            <p className="text-xs text-blue-600 capitalize">{user.role}</p>
+            {user.verified && (
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            )}
+          </div>
         </div>
       )}
       
       <nav className="space-y-2">
-        {menuItems.map((item, index) => {
+        {filteredMenuItems.map((item, index) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
           const isAdmin = item.id === 'admin';

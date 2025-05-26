@@ -14,20 +14,21 @@ import { MessageCircle, DollarSign, FileText, Package, Heart, BarChart3, Shield 
 
 const AppContent = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const { user, isAdmin } = useUser();
+  const { user, isAdmin, hasPermission } = useUser();
 
   const renderActiveComponent = () => {
+    // Check permissions before rendering sensitive components
     switch (activeTab) {
       case "dashboard":
         return <Dashboard />;
       case "chatbot":
         return <ChatbotInterface />;
       case "fundraising":
-        return <FundraisingCampaigns />;
+        return hasPermission(['donor', 'admin', 'volunteer']) ? <FundraisingCampaigns /> : <Dashboard />;
       case "needs":
-        return <NeedsAssessment />;
+        return hasPermission(['user', 'admin', 'volunteer']) ? <NeedsAssessment /> : <Dashboard />;
       case "matching":
-        return <ResourceMatching />;
+        return hasPermission(['admin', 'volunteer']) ? <ResourceMatching /> : <Dashboard />;
       case "transparency":
         return <DonorPortal />;
       case "admin":
@@ -38,20 +39,17 @@ const AppContent = () => {
   };
 
   const getMenuItems = () => {
-    const baseItems = [
-      { id: "dashboard", label: "Dashboard", icon: BarChart3 },
-      { id: "chatbot", label: "AI Assistant", icon: MessageCircle },
-      { id: "fundraising", label: "Fundraising", icon: DollarSign },
-      { id: "needs", label: "Needs Assessment", icon: FileText },
-      { id: "matching", label: "Resource Matching", icon: Package },
-      { id: "transparency", label: "Donor Portal", icon: Heart },
+    const allItems = [
+      { id: "dashboard", label: "Dashboard", icon: BarChart3, requiredRoles: [] },
+      { id: "chatbot", label: "AI Assistant", icon: MessageCircle, requiredRoles: [] },
+      { id: "fundraising", label: "Fundraising", icon: DollarSign, requiredRoles: ['donor', 'admin', 'volunteer'] },
+      { id: "needs", label: "Needs Assessment", icon: FileText, requiredRoles: ['user', 'admin', 'volunteer'] },
+      { id: "matching", label: "Resource Matching", icon: Package, requiredRoles: ['admin', 'volunteer'] },
+      { id: "transparency", label: "Donor Portal", icon: Heart, requiredRoles: [] },
+      { id: "admin", label: "Admin Panel", icon: Shield, requiredRoles: ['admin'] },
     ];
 
-    if (isAdmin) {
-      baseItems.push({ id: "admin", label: "Admin Panel", icon: Shield });
-    }
-
-    return baseItems;
+    return allItems;
   };
 
   return (
