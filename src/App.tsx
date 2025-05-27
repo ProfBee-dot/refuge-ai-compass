@@ -11,6 +11,7 @@ import RefugeePortal from "./pages/RefugeePortal";
 import DonorPortal from "./pages/DonorPortal";
 import AdminPortal from "./pages/AdminPortal";
 import NotFound from "./pages/NotFound";
+import { Header } from "./components/Header";
 
 const queryClient = new QueryClient();
 
@@ -21,9 +22,11 @@ const App = () => (
       <Sonner />
       <UserProvider>
         <BrowserRouter>
+          <Header />
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<WorldView />} />
             <Route path="/world" element={<WorldView />} />
+            <Route path="/portals" element={<Index />} />
             <Route path="/refugee-portal" element={<RefugeePortal />} />
             <Route path="/donor-portal" element={<DonorPortal />} />
             <Route path="/admin-portal" element={<AdminPortal />} />

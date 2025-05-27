@@ -49,6 +49,11 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    size: 100vw 100vh;
   }
 
   .dark {

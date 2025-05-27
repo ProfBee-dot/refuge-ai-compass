@@ -5,10 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Globe, Heart, Shield, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
+import { LoginModal } from './LoginModal';
+import { useState } from "react";
 
 export const PortalSelector = () => {
   const navigate = useNavigate();
   const { user, isAdmin } = useUser();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const portals = [
     {
@@ -121,19 +124,23 @@ export const PortalSelector = () => {
         </div>
 
         {!user && (
-          <div className="mt-8 text-center">
-            <Card className="max-w-md mx-auto">
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-2">Need an Account?</h3>
-                <p className="text-gray-600 mb-4">
-                  Sign in to access personalized portals based on your role
-                </p>
-                <Button className="w-full">
-                  Sign In / Register
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+          <>
+            <div className="mt-8 text-center sticky bottom-5">
+              <Card className="max-w-md mx-auto">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-2">Need an Account?</h3>
+                  <p className="text-gray-600 mb-4">
+                    Sign in to access personalized portals based on your role
+                  </p>
+                  <Button className="w-full">
+                    Sign In / Register
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+          </>
         )}
       </div>
     </div>

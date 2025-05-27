@@ -32,10 +32,10 @@ interface Campaign {
 export const SmartFilter = () => {
   const [filters, setFilters] = useState<FilterState>({
     search: "",
-    category: "",
-    location: "",
-    urgency: "",
-    amountRange: "",
+    category: "all",
+    location: "all",
+    urgency: "all",
+    amountRange: "any",
     sortBy: "newest"
   });
 
@@ -104,9 +104,9 @@ export const SmartFilter = () => {
   const filteredCampaigns = campaigns.filter(campaign => {
     return (
       campaign.title.toLowerCase().includes(filters.search.toLowerCase()) &&
-      (filters.category === "" || campaign.category === filters.category) &&
-      (filters.location === "" || campaign.location.toLowerCase().includes(filters.location.toLowerCase())) &&
-      (filters.urgency === "" || campaign.urgency === filters.urgency)
+      (filters.category === "all" || campaign.category === filters.category) &&
+      (filters.location === "all" || campaign.location.toLowerCase().includes(filters.location.toLowerCase())) &&
+      (filters.urgency === "all" || campaign.urgency === filters.urgency)
     );
   });
 
@@ -131,13 +131,12 @@ export const SmartFilter = () => {
                 className="pl-10"
               />
             </div>
-            
             <Select onValueChange={(value) => setFilters({...filters, category: value})}>
               <SelectTrigger>
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem> {/* Use "all" instead of an empty string */}
                 {categories.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
@@ -159,7 +158,7 @@ export const SmartFilter = () => {
                 <SelectValue placeholder="Urgency" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Urgency</SelectItem>
+                <SelectItem value="all">All Urgency</SelectItem>
                 <SelectItem value="critical">Critical</SelectItem>
                 <SelectItem value="high">High</SelectItem>
                 <SelectItem value="medium">Medium</SelectItem>
@@ -172,7 +171,7 @@ export const SmartFilter = () => {
                 <SelectValue placeholder="Target Amount" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Any Amount</SelectItem>
+                <SelectItem value="any">Any Amount</SelectItem>
                 <SelectItem value="0-5000">$0 - $5,000</SelectItem>
                 <SelectItem value="5000-15000">$5,000 - $15,000</SelectItem>
                 <SelectItem value="15000+">$15,000+</SelectItem>

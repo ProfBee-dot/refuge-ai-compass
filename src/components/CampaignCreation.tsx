@@ -163,9 +163,7 @@ export const CampaignCreation = () => {
                 <SelectContent>
                   {urgencyLevels.map((level) => (
                     <SelectItem key={level.value} value={level.value}>
-                      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${level.color}`}>
-                        {level.label}
-                      </span>
+                      <Badge className={level.color}>{level.label}</Badge>
                     </SelectItem>
                   ))}
                 </SelectContent>

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MessageCircle, Upload, FileText, Heart, Languages, User, AlertTriangle } from "lucide-react";
+import { MessageCircle, Upload, FileText, Heart, Languages, User, AlertTriangle, Notebook, BotIcon } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { ChatbotInterface } from "@/components/ChatbotInterface";
 import { AidRequestForm } from "@/components/AidRequestForm";
@@ -11,15 +11,6 @@ import { DocumentUpload } from "@/components/DocumentUpload";
 
 export const RefugeePortal = () => {
   const { user } = useUser();
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
-
-  const languages = [
-    { code: "en", name: "English" },
-    { code: "ar", name: "العربية" },
-    { code: "fa", name: "فارسی" },
-    { code: "fr", name: "Français" },
-    { code: "de", name: "Deutsch" },
-  ];
 
   const urgentNeeds = [
     { id: 1, type: "Medical", description: "Emergency medical supplies needed", priority: "urgent", status: "pending" },
@@ -33,35 +24,53 @@ export const RefugeePortal = () => {
   ];
 
   return (
-    <div className="space-y-6 p-4 max-w-6xl mx-auto">
+    <div className="space-y-6 w-full min-h-screen p-4 md:px-6">
       {/* Header with Language Toggle */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Refugee Support Portal</h2>
           <p className="text-gray-600">Your personalized assistance dashboard</p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Languages className="w-4 h-4 text-gray-500" />
-          <select 
-            value={selectedLanguage} 
-            onChange={(e) => setSelectedLanguage(e.target.value)}
-            className="text-sm border rounded-md px-2 py-1"
-          >
-            {languages.map(lang => (
-              <option key={lang.code} value={lang.code}>{lang.name}</option>
-            ))}
-          </select>
-        </div>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="chat">Chat Support</TabsTrigger>
-          <TabsTrigger value="request">Request Aid</TabsTrigger>
-          <TabsTrigger value="documents">Documents</TabsTrigger>
-          <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
+      <Tabs defaultValue="overview" className="space-y-4 w-full z-20">
+        <TabsList className="fixed flex gap-3 px-2 py-5 shadow-md items-center justify-between left-0 bottom-0 md:grid md:p-0 w-full md:grid-cols-6 md:relative">
+          <TabsTrigger className="flex gap-1" value="overview">
+            <Notebook className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Overview
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="chat">
+            <BotIcon className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Chat Support
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="request">
+            <Heart className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Request Aid
+            </span>
+          </TabsTrigger>
+          {/* <TabsTrigger className="flex gap-1" value="documents">
+            <Upload className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Documents
+            </span>
+          </TabsTrigger> */}
+          <TabsTrigger className="flex gap-1" value="campaigns">
+            <FileText className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Campaigns
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="profile">
+            <User className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Profile
+            </span>
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
