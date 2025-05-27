@@ -68,7 +68,7 @@ export const PortalSelector = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br start-anime from-blue-50 via-white to-cyan-50 p-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Refugee Support Platform</h1>
@@ -132,7 +132,9 @@ export const PortalSelector = () => {
                   <p className="text-gray-600 mb-4">
                     Sign in to access personalized portals based on your role
                   </p>
-                  <Button className="w-full">
+                  <Button
+                    onClick={() => setIsLoginOpen(true)}
+                    className="w-full transition-all duration-300 hover:scale-105 hover:shadow-lg">
                     Sign In / Register
                   </Button>
                 </CardContent>

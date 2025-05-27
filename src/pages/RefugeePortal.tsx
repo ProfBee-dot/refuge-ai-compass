@@ -73,7 +73,7 @@ export const RefugeePortal = () => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-4">
+        <TabsContent value="overview"  className="anime-start space-y-4">
           {/* Urgent Alerts */}
           <Card>
             <CardHeader>
@@ -125,25 +125,25 @@ export const RefugeePortal = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="chat" className="space-y-4">
+        <TabsContent value="chat"  className="anime-start space-y-4">
           <ChatbotInterface />
         </TabsContent>
 
-        <TabsContent value="request" className="space-y-4">
+        <TabsContent value="request"  className="anime-start space-y-4">
           <AidRequestForm />
         </TabsContent>
 
-        <TabsContent value="documents" className="space-y-4">
+        <TabsContent value="documents"  className="anime-start space-y-4">
           <DocumentUpload />
         </TabsContent>
 
-        <TabsContent value="campaigns" className="space-y-4">
+        <TabsContent value="campaigns"  className="anime-start space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Linked Aid Campaigns</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 {campaignUpdates.map((campaign) => (
                   <div key={campaign.id} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between mb-2">
@@ -169,7 +169,7 @@ export const RefugeePortal = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="profile" className="space-y-4">
+        <TabsContent value="profile"  className="anime-start space-y-4">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -178,7 +178,7 @@ export const RefugeePortal = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-700">Full Name</label>

@@ -104,3 +104,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.anime-start {
+  opacity: 1;
+  transform: translateY(0px);
+  transition: all .25s;
+}
+
+@starting-style {
+  .anime-start {
+    /* fade in upwards */
+    opacity: 0;
+    transform: translateY(20px);    
+  }
+    
+}

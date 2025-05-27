@@ -179,15 +179,15 @@ export const DonorPortal = () => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="discover" className="space-y-4">
+        <TabsContent value="discover"  className="anime-start space-y-4">
           <SmartFilter />
         </TabsContent>
 
-        <TabsContent value="create" className="space-y-4">
+        <TabsContent value="create"  className="anime-start space-y-4">
           <CampaignCreation />
         </TabsContent>
 
-        <TabsContent value="donations" className="space-y-4">
+        <TabsContent value="donations"  className="anime-start space-y-4">
           <div className="grid grid-cols-1 gap-4">
             {donations.map((donation) => (
               <Card key={donation.id} className="hover:shadow-lg transition-shadow">
@@ -241,11 +241,11 @@ export const DonorPortal = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="wallet" className="space-y-4">
+        <TabsContent value="wallet"  className="anime-start space-y-4">
           <WalletIntegration />
         </TabsContent>
 
-        <TabsContent value="impact" className="space-y-4">
+        <TabsContent value="impact"  className="anime-start space-y-4">
           
           {/* Impact Overview */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -274,7 +274,7 @@ export const DonorPortal = () => {
                 <CardTitle>Geographic Impact</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div  className="anime-start space-y-4">
                   <div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium">Jordan</span>
@@ -305,7 +305,7 @@ export const DonorPortal = () => {
                 <CardTitle>Support Categories</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div  className="anime-start space-y-4">
                   <div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium">Medical</span>
@@ -337,7 +337,7 @@ export const DonorPortal = () => {
               <CardTitle>Success Stories</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
                   <h4 className="font-semibold text-blue-900">Ahmad Hassan's Recovery</h4>
                   <p className="text-blue-800 text-sm mt-1">
@@ -359,7 +359,7 @@ export const DonorPortal = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="blockchain" className="space-y-4">
+        <TabsContent value="blockchain"  className="anime-start space-y-4">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -368,7 +368,7 @@ export const DonorPortal = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 {blockchainEntries.map((entry) => (
                   <div key={entry.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
                     <div className="flex-1">

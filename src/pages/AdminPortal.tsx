@@ -45,7 +45,7 @@ export const AdminPortal = () => {
   };
 
   return (
-    <div className="space-y-6 w-full min-h-screen p-4 md:px-6">
+    <div className="space-y-6 w-full anime-start min-h-screen p-4 md:px-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Admin Control Panel</h2>
@@ -94,7 +94,7 @@ export const AdminPortal = () => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-4">
+        <TabsContent value="overview"  className="anime-start space-y-4">
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {quickStats.map((stat) => {
@@ -122,7 +122,7 @@ export const AdminPortal = () => {
               <CardTitle>Platform Analytics</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-gray-50 rounded-lg">
                     <div className="text-lg font-bold text-gray-600">89%</div>
@@ -142,13 +142,13 @@ export const AdminPortal = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="approvals" className="space-y-4">
+        <TabsContent value="approvals"  className="anime-start space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Pending Approvals</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 {pendingApprovals.map((item) => (
                   <div key={item.id} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between mb-3">
@@ -186,13 +186,13 @@ export const AdminPortal = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="alerts" className="space-y-4">
+        <TabsContent value="alerts"  className="anime-start space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>System Alerts</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 {systemAlerts.map((alert) => (
                   <div key={alert.id} className={`p-4 rounded-lg border ${getAlertColor(alert.type)}`}>
                     <div className="flex items-start justify-between mb-2">
@@ -226,7 +226,7 @@ export const AdminPortal = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="users" className="space-y-4">
+        <TabsContent value="users"  className="anime-start space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>User Management Overview</CardTitle>
@@ -260,13 +260,13 @@ export const AdminPortal = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="campaigns" className="space-y-4">
+        <TabsContent value="campaigns"  className="anime-start space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Campaign Management</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-green-50 rounded-lg">
                     <div className="text-lg font-bold text-green-600">$1.2M</div>
