@@ -3,13 +3,8 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { createClient } from '@supabase/supabase-js';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/superbaseClient';
+import { testUsers } from '@/lib/testData';
 
-
-// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-
-// const supabaseAnonKey =   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-// const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export type UserRole = 'admin' | 'user' | 'volunteer' | 'donor';
 
@@ -81,11 +76,13 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      // const { data, error } = await supabase
+      //   .from('user_profiles')
+      //   .select('*')
+      //   .eq('id', userId)
+      //   .single();
+      const data = testUsers.find( testUser => (userId === testUser.user.id))?.user;
+      const error = data ? null : { message: 'Invalid email or password', code: "errcode" };
 
       if (error && error.code !== 'PGRST116') {
         console.error('Error fetching user profile:', error);
@@ -99,8 +96,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
           name: data.full_name || data.email,
           email: data.email,
           role: data.role as UserRole,
-          avatar: data.avatar_url,
-          organization: data.organization,
+          // avatar: data?.avatar_url,
+          organization: data?.organization,
           verified: data.verified,
         });
       }
@@ -114,10 +111,13 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       setLoading(true);
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // const { data, error } = await supabase.auth.signInWithPassword({
+      //   email,
+      //   password,
+      // });
+
+      const data = testUsers.find( testUser => (email === testUser.user.email && password === testUser.user.password))
+      const error = data ? null : { message: 'Invalid email or password' };
 
       if (error) {
         toast({

@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { useUser } from '@/contexts/UserContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { testCredentials } from '@/lib/testData';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -51,13 +52,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
 
   // Test account credentials helper
   const fillTestCredentials = (role: string) => {
-    const credentials = {
-      admin: { email: 'admin@refugeeai.org', password: 'admin123' },
-      volunteer: { email: 'volunteer@refugeeai.org', password: 'volunteer123' },
-      donor: { email: 'donor@refugeeai.org', password: 'donor123' },
-      user: { email: 'user@refugeeai.org', password: 'user123' }
-    };
-    const cred = credentials[role as keyof typeof credentials];
+    const cred = testCredentials[role as keyof typeof testCredentials];
     if (cred) {
       setFormData({
         ...formData,
