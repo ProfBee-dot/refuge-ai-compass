@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { createAdminUser, promoteToAdmin } from '@/utils/adminHelpers';
+import { createAdminUser, promoteToAdmin, createTestUsers } from '@/utils/adminHelpers';
 
 export const AdminSetup = () => {
   const [email, setEmail] = useState('admin@refugeeai.com');
-  const [password, setPassword] = useState('admin123!');
+  const [password, setPassword] = useState('RefugeeAdmin123!');
   const [fullName, setFullName] = useState('System Administrator');
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -67,6 +67,38 @@ export const AdminSetup = () => {
     setLoading(false);
   };
 
+  const handleCreateAllTestUsers = async () => {
+    setLoading(true);
+    try {
+      const results = await createTestUsers();
+      
+      const successful = results.filter(r => r.success);
+      const failed = results.filter(r => !r.success);
+
+      if (successful.length > 0) {
+        toast({
+          title: "Test Users Created!",
+          description: `Successfully created ${successful.length} test accounts`,
+        });
+      }
+
+      if (failed.length > 0) {
+        toast({
+          title: "Some Errors Occurred",
+          description: `${failed.length} accounts failed to create. Check console for details.`,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create test users",
+        variant: "destructive",
+      });
+    }
+    setLoading(false);
+  };
+
   return (
     <Card className="max-w-md mx-auto mt-8">
       <CardHeader>
@@ -107,12 +139,25 @@ export const AdminSetup = () => {
           >
             Promote Existing User to Admin
           </Button>
+
+          <Button 
+            onClick={handleCreateAllTestUsers} 
+            disabled={loading}
+            variant="secondary"
+            className="w-full"
+          >
+            Create All Test Users
+          </Button>
         </div>
 
         <div className="text-sm text-gray-600 mt-4">
-          <p><strong>Default Admin Credentials:</strong></p>
-          <p>Email: admin@refugeeai.com</p>
-          <p>Password: admin123!</p>
+          <p><strong>Default Test Accounts:</strong></p>
+          <div className="space-y-1 text-xs">
+            <p><strong>Admin:</strong> admin@refugeeai.com / RefugeeAdmin123!</p>
+            <p><strong>Volunteer:</strong> volunteer@refugeeai.com / Volunteer123!</p>
+            <p><strong>Donor:</strong> donor@refugeeai.com / Donor123!</p>
+            <p><strong>User:</strong> user@refugeeai.com / User123!</p>
+          </div>
         </div>
       </CardContent>
     </Card>

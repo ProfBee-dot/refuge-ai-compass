@@ -49,13 +49,13 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     }
   };
 
-  // Test account credentials helper
+  // Updated test account credentials
   const fillTestCredentials = (role: string) => {
     const credentials = {
-      admin: { email: 'admin@refugeeai.org', password: 'admin123' },
-      volunteer: { email: 'volunteer@refugeeai.org', password: 'volunteer123' },
-      donor: { email: 'donor@refugeeai.org', password: 'donor123' },
-      user: { email: 'user@refugeeai.org', password: 'user123' }
+      admin: { email: 'admin@refugeeai.com', password: 'RefugeeAdmin123!' },
+      volunteer: { email: 'volunteer@refugeeai.com', password: 'Volunteer123!' },
+      donor: { email: 'donor@refugeeai.com', password: 'Donor123!' },
+      user: { email: 'user@refugeeai.com', password: 'User123!' }
     };
     const cred = credentials[role as keyof typeof credentials];
     if (cred) {
