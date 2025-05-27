@@ -2,12 +2,6 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/superbaseClient';
 
-// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-
-// const supabaseAnonKey =   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-// const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 export type UserRole = 'admin' | 'user' | 'volunteer' | 'donor';
 
 export interface User {
@@ -24,7 +18,7 @@ interface UserContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
-  signUp: (email: string, password: string, name: string, organization?: string) => Promise<boolean>;
+  signUp: (email: string, password: string, name: string, organization?: string, role?: UserRole) => Promise<boolean>;
   updateUser: (userData: Partial<User>) => Promise<void>;
   isAdmin: boolean;
   isDonor: boolean;
@@ -147,7 +141,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     }
   };
 
-  const signUp = async (email: string, password: string, name: string, organization?: string): Promise<boolean> => {
+  const signUp = async (email: string, password: string, name: string, organization?: string, role: UserRole = 'user'): Promise<boolean> => {
     try {
       setLoading(true);
       const { data, error } = await supabase.auth.signUp({
@@ -165,14 +159,14 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       }
 
       if (data.user) {
-        // Create user profile
+        // Create user profile with selected role
         const { error: profileError } = await supabase
           .from('user_profiles')
           .insert({
             id: data.user.id,
             email: data.user.email,
             full_name: name,
-            role: 'user',
+            role: role,
             organization: organization,
             verified: false,
           });
@@ -183,7 +177,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
         toast({
           title: "Registration successful!",
-          description: "Please check your email to verify your account.",
+          description: `Account created with ${role} role. Please check your email to verify your account.`,
         });
         return true;
       }
