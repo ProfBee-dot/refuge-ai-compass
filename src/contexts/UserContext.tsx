@@ -1,9 +1,6 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/superbaseClient';
-
 
 // const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 
