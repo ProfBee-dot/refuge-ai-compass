@@ -1,10 +1,24 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Users, DollarSign, Package, AlertTriangle, TrendingUp, Globe } from "lucide-react";
+import { useUser } from "@/contexts/UserContext";
+import { AdminSetup } from "./AdminSetup";
 
 export const Dashboard = () => {
+  const { user, isAdmin } = useUser();
+
+  // Show admin setup if no user or not admin
+  if (!user || !isAdmin) {
+    return (
+      <div>
+        <h2 className="text-2xl font-bold mb-6">Dashboard</h2>
+        <p className="mb-4">Please create an admin account to access all features:</p>
+        <AdminSetup />
+      </div>
+    );
+  }
+
   const stats = [
     {
       title: "Active Cases",
