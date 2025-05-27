@@ -13,11 +13,14 @@ export const createAdminUser = async (email: string, password: string, fullName:
 
     if (signUpError) {
       console.error('Sign up error:', signUpError);
-      throw signUpError;
+      return { success: false, error: signUpError };
     }
 
     if (signUpData.user) {
       console.log('User created, setting up admin profile...');
+      
+      // Wait a moment for the user to be fully created
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Create/update user profile with admin role
       const { error: profileError } = await supabase
@@ -29,15 +32,19 @@ export const createAdminUser = async (email: string, password: string, fullName:
           role: 'admin',
           organization: 'RefugeeAI Platform',
           verified: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         });
 
       if (profileError) {
         console.error('Profile creation error:', profileError);
-        throw profileError;
+        return { success: false, error: profileError };
       }
 
       console.log('Admin user created successfully!');
       return { success: true, user: signUpData.user };
+    } else {
+      return { success: false, error: { message: 'No user data returned' } };
     }
   } catch (error) {
     console.error('Error creating admin user:', error);
@@ -53,11 +60,15 @@ export const promoteToAdmin = async (userEmail: string) => {
       .update({ 
         role: 'admin', 
         verified: true,
-        organization: 'RefugeeAI Platform'
+        organization: 'RefugeeAI Platform',
+        updated_at: new Date().toISOString(),
       })
       .eq('email', userEmail);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error promoting user:', error);
+      return { success: false, error };
+    }
     
     console.log(`User ${userEmail} promoted to admin`);
     return { success: true };
@@ -67,7 +78,7 @@ export const promoteToAdmin = async (userEmail: string) => {
   }
 };
 
-// Create all test users
+// Create all test users with rate limiting protection
 export const createTestUsers = async () => {
   const testUsers = [
     {
@@ -106,6 +117,11 @@ export const createTestUsers = async () => {
     try {
       console.log(`Creating user: ${user.email}`);
       
+      // Add delay between requests to avoid rate limiting
+      if (results.length > 0) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+      
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: user.email,
         password: user.password,
@@ -113,11 +129,18 @@ export const createTestUsers = async () => {
 
       if (signUpError) {
         console.error(`Error creating ${user.email}:`, signUpError);
-        results.push({ email: user.email, success: false, error: signUpError.message });
+        results.push({ 
+          email: user.email, 
+          success: false, 
+          error: signUpError.message || 'Unknown signup error'
+        });
         continue;
       }
 
       if (signUpData.user) {
+        // Wait for user to be fully created
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         // Create user profile
         const { error: profileError } = await supabase
           .from('user_profiles')
@@ -128,19 +151,35 @@ export const createTestUsers = async () => {
             role: user.role,
             organization: user.organization,
             verified: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
           });
 
         if (profileError) {
           console.error(`Error creating profile for ${user.email}:`, profileError);
-          results.push({ email: user.email, success: false, error: profileError.message });
+          results.push({ 
+            email: user.email, 
+            success: false, 
+            error: `Profile creation failed: ${profileError.message || 'Unknown error'}`
+          });
         } else {
           console.log(`Successfully created ${user.email}`);
           results.push({ email: user.email, success: true });
         }
+      } else {
+        results.push({ 
+          email: user.email, 
+          success: false, 
+          error: 'No user data returned from signup'
+        });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Unexpected error creating ${user.email}:`, error);
-      results.push({ email: user.email, success: false, error: error.message });
+      results.push({ 
+        email: user.email, 
+        success: false, 
+        error: error.message || 'Unexpected error occurred'
+      });
     }
   }
 

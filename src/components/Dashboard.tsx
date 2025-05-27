@@ -1,24 +1,10 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Users, DollarSign, Package, AlertTriangle, TrendingUp, Globe } from "lucide-react";
-import { useUser } from "@/contexts/UserContext";
-import { AdminSetup } from "./AdminSetup";
 
 export const Dashboard = () => {
-  const { user, isAdmin } = useUser();
-
-  // Show admin setup if no user or not admin
-  if (!user || !isAdmin) {
-    return (
-      <div>
-        <h2 className="text-2xl font-bold mb-6">Dashboard</h2>
-        <p className="mb-4">Please create an admin account to access all features:</p>
-        <AdminSetup />
-      </div>
-    );
-  }
-
   const stats = [
     {
       title: "Active Cases",
@@ -163,6 +149,23 @@ export const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Admin Setup Notice */}
+      <Card className="border-blue-200 bg-blue-50">
+        <CardContent className="p-6">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+              <Users className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-blue-900">Admin Access</h3>
+              <p className="text-sm text-blue-700">
+                To access admin features and create test accounts, please contact your system administrator or check the AdminSetup component.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
