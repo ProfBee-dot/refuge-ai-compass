@@ -168,17 +168,22 @@ export const UserProvider = ({ children }: UserProviderProps) => {
             full_name: name,
             role: role,
             organization: organization,
-            verified: false,
+            verified: role === 'admin', // Auto-verify admin accounts
           });
 
         if (profileError) {
           console.error('Error creating user profile:', profileError);
+          toast({
+            title: "Profile Creation Failed",
+            description: "Account created but profile setup failed. Please contact support.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Registration successful!",
+            description: `Account created with ${role} role. ${role === 'admin' ? 'Admin access granted.' : 'Please check your email to verify your account.'}`,
+          });
         }
-
-        toast({
-          title: "Registration successful!",
-          description: `Account created with ${role} role. Please check your email to verify your account.`,
-        });
         return true;
       }
       return false;
@@ -244,6 +249,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     if (!user) return false;
     
     const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+    
+    // Admin has access to everything
+    if (user.role === 'admin') return true;
+    
     return roles.includes(user.role);
   };
 

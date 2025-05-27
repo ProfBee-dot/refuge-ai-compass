@@ -9,12 +9,32 @@ import { DonorPortal } from "@/components/DonorPortal";
 import { AdminDashboard } from "@/components/AdminDashboard";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
+import { LandingPage } from "@/components/LandingPage";
 import { UserProvider, useUser } from "@/contexts/UserContext";
 import { MessageCircle, DollarSign, FileText, Package, Heart, BarChart3, Shield } from "lucide-react";
 
 const AppContent = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const { user, isAdmin, hasPermission } = useUser();
+  const { user, isAdmin, hasPermission, isLoggedIn, loading } = useUser();
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <MessageCircle className="w-6 h-6 text-white" />
+          </div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show landing page if not logged in
+  if (!isLoggedIn) {
+    return <LandingPage />;
+  }
 
   const renderActiveComponent = () => {
     // Check permissions before rendering sensitive components
