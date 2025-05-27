@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,11 +12,21 @@ import {
 import { useUser } from '@/contexts/UserContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { testCredentials } from '@/lib/testData';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+
+const postLoginDestination: {[key: string]: string} = {
+  'admin': '/admin-portal',
+  'volunteer': '/world',
+  'donor': '/donor-portal',
+  'user': '/refugee-portal'
+}
+
 
 export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -27,7 +37,15 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     password: '',
     organization: '',
   });
-  const { login, signUp, loading } = useUser();
+  const { login, signUp, loading, user } = useUser();
+  const navigateTo = useNavigate();
+
+  useEffect(() => {
+    if (!isOpen && user){
+      navigateTo( postLoginDestination[user.role] );
+    }
+  }, [isOpen, user])
+
 
   const resetForm = () => {
     setFormData({ name: '', email: '', password: '', organization: '' });

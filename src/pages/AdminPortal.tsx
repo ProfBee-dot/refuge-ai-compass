@@ -6,7 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, Users, AlertTriangle, DollarSign, Package, 
-  CheckCircle, XCircle, Clock, Eye, Settings, BarChart3 
+  CheckCircle, XCircle, Clock, Eye, Settings, BarChart3, 
+  Notebook,
+  TrendingUpIcon,
+  CircleCheckIcon
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 
@@ -42,7 +45,7 @@ export const AdminPortal = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-h-screen p-4 md:px-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Admin Control Panel</h2>
@@ -56,36 +59,88 @@ export const AdminPortal = () => {
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {quickStats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.label}>
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                    <Icon className={`w-5 h-5 ${stat.color}`} />
+
+      <Tabs defaultValue="overview" className="space-y-4 w-full z-20">
+        <TabsList className="fixed flex gap-3 px-2 py-5 shadow-md items-center justify-between left-0 bottom-0 md:grid md:p-0 w-full md:grid-cols-6 md:relative">
+          <TabsTrigger className="flex gap-1" value="overview">
+            <TrendingUpIcon className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Overview / Analytics
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="approvals">
+            <CircleCheckIcon className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Approvals
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="alerts">
+            <AlertTriangle className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+            Alerts
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="users">
+            <Users className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              User Management
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="users">
+            <Package className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Campaigns
+            </span>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-4">
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {quickStats.map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <Card key={stat.label}>
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+                        <Icon className={`w-5 h-5 ${stat.color}`} />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">{stat.label}</p>
+                        <p className="text-xl font-bold">{stat.value}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Platform Analytics</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="text-lg font-bold text-gray-600">89%</div>
+                    <div className="text-sm text-gray-700">User Satisfaction</div>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-600">{stat.label}</p>
-                    <p className="text-xl font-bold">{stat.value}</p>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="text-lg font-bold text-gray-600">24h</div>
+                    <div className="text-sm text-gray-700">Avg Response Time</div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-
-      <Tabs defaultValue="approvals" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="approvals">Approvals</TabsTrigger>
-          <TabsTrigger value="alerts">Alerts</TabsTrigger>
-          <TabsTrigger value="users">User Management</TabsTrigger>
-          <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
+                <Button>
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  View Full Analytics
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="approvals" className="space-y-4">
           <Card>
@@ -231,31 +286,6 @@ export const AdminPortal = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="analytics" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Platform Analytics</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <div className="text-lg font-bold text-gray-600">89%</div>
-                    <div className="text-sm text-gray-700">User Satisfaction</div>
-                  </div>
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <div className="text-lg font-bold text-gray-600">24h</div>
-                    <div className="text-sm text-gray-700">Avg Response Time</div>
-                  </div>
-                </div>
-                <Button>
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  View Full Analytics
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
     </div>
   );
