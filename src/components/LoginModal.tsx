@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -36,6 +37,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     email: '',
     password: '',
     organization: '',
+    role: 'user' as 'admin' | 'user' | 'volunteer' | 'donor',
   });
   const { login, signUp, loading, user } = useUser();
   const navigateTo = useNavigate();
@@ -48,7 +50,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
 
 
   const resetForm = () => {
-    setFormData({ name: '', email: '', password: '', organization: '' });
+    setFormData({ name: '', email: '', password: '', organization: '', role: 'user' });
     setShowPassword(false);
   };
 
@@ -59,7 +61,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     if (isLogin) {
       success = await login(formData.email, formData.password);
     } else {
-      success = await signUp(formData.email, formData.password, formData.name, formData.organization);
+      success = await signUp(formData.email, formData.password, formData.name, formData.organization, formData.role);
     }
 
     if (success) {
@@ -68,7 +70,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     }
   };
 
-  // Test account credentials helper
+  // Updated test account credentials
   const fillTestCredentials = (role: string) => {
     const cred = testCredentials[role as keyof typeof testCredentials];
     if (cred) {
@@ -143,16 +145,33 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
           </div>
           
           {!isLogin && (
-            <div>
-              <Label htmlFor="organization">Organization (Optional)</Label>
-              <Input
-                id="organization"
-                value={formData.organization}
-                onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-                className="mt-1"
-                placeholder="NGO, Company, etc."
-              />
-            </div>
+            <>
+              <div>
+                <Label htmlFor="role">Account Type</Label>
+                <Select value={formData.role} onValueChange={(value: 'admin' | 'user' | 'volunteer' | 'donor') => setFormData({ ...formData, role: value })}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Select your role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="user">Regular User</SelectItem>
+                    <SelectItem value="volunteer">Volunteer</SelectItem>
+                    <SelectItem value="donor">Donor</SelectItem>
+                    <SelectItem value="admin">Administrator</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label htmlFor="organization">Organization (Optional)</Label>
+                <Input
+                  id="organization"
+                  value={formData.organization}
+                  onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                  className="mt-1"
+                  placeholder="NGO, Company, etc."
+                />
+              </div>
+            </>
           )}
           
           {isLogin && (

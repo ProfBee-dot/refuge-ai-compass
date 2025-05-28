@@ -1,6 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/superbaseClient';
 import { testUsers } from '@/lib/testData';
@@ -22,7 +21,7 @@ interface UserContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
-  signUp: (email: string, password: string, name: string, organization?: string) => Promise<boolean>;
+  signUp: (email: string, password: string, name: string, organization?: string, role?: UserRole) => Promise<boolean>;
   updateUser: (userData: Partial<User>) => Promise<void>;
   isAdmin: boolean;
   isDonor: boolean;
@@ -150,7 +149,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     }
   };
 
-  const signUp = async (email: string, password: string, name: string, organization?: string): Promise<boolean> => {
+  const signUp = async (email: string, password: string, name: string, organization?: string, role: UserRole = 'user'): Promise<boolean> => {
     try {
       setLoading(true);
       const { data, error } = await supabase.auth.signUp({
@@ -168,26 +167,31 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       }
 
       if (data.user) {
-        // Create user profile
+        // Create user profile with selected role
         const { error: profileError } = await supabase
           .from('user_profiles')
           .insert({
             id: data.user.id,
             email: data.user.email,
             full_name: name,
-            role: 'user',
+            role: role,
             organization: organization,
-            verified: false,
+            verified: role === 'admin', // Auto-verify admin accounts
           });
 
         if (profileError) {
           console.error('Error creating user profile:', profileError);
+          toast({
+            title: "Profile Creation Failed",
+            description: "Account created but profile setup failed. Please contact support.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Registration successful!",
+            description: `Account created with ${role} role. ${role === 'admin' ? 'Admin access granted.' : 'Please check your email to verify your account.'}`,
+          });
         }
-
-        toast({
-          title: "Registration successful!",
-          description: "Please check your email to verify your account.",
-        });
         return true;
       }
       return false;
@@ -253,6 +257,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     if (!user) return false;
     
     const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+    
+    // Admin has access to everything
+    if (user.role === 'admin') return true;
+    
     return roles.includes(user.role);
   };
 

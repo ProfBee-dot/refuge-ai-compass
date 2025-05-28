@@ -12,6 +12,7 @@ import DonorPortal from "./pages/DonorPortal";
 import AdminPortal from "./pages/AdminPortal";
 import NotFound from "./pages/NotFound";
 import { Header } from "./components/Header";
+import { LandingPage } from "./components/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +25,7 @@ const App = () => (
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path="/" element={<WorldView />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/world" element={<WorldView />} />
             <Route path="/portals" element={<Index />} />
             <Route path="/refugee-portal" element={<RefugeePortal />} />

@@ -16,7 +16,7 @@ export const PortalSelector = () => {
   const portals = [
     {
       id: "world",
-      title: "World View",
+      title: "Volunteer Portal",
       description: "Public dashboard with global refugee support data",
       icon: Globe,
       color: "text-blue-600",

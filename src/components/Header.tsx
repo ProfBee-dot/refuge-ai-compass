@@ -70,7 +70,7 @@ export const Header = () => {
               onClick={() => setIsLoginOpen(true)}
               className="transition-all duration-300 hover:scale-105 hover:shadow-lg"
             >
-              Sign In
+              {window.location.pathname === '/' ? 'Join Our Mission' : 'Sign In'}
             </Button>
     
           )}
