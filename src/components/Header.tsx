@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Globe, Heart, Users, Shield, Home, LogOut } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/hooks/useUserContext";
 import { UserProfileDropdown } from "./UserProfileDropdown";
 import { LoginModal } from "./LoginModal";
 import { useState } from "react";

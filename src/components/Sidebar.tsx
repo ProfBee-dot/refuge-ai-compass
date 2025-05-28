@@ -1,7 +1,6 @@
-
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/hooks/useUserContext";
 
 interface MenuItem {
   id: string;
