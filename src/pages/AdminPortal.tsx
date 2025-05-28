@@ -11,7 +11,7 @@ import {
   TrendingUpIcon,
   CircleCheckIcon
 } from "lucide-react";
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/hooks/useUserContext";
 
 export const AdminPortal = () => {
   const { user } = useUser();

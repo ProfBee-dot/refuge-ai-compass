@@ -1,10 +1,9 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Globe, Heart, Shield, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/hooks/useUserContext";
 import { LoginModal } from './LoginModal';
 import { useState } from "react";
 

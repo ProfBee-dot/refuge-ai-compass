@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Mic, Heart, Loader2 } from "lucide-react";
 import { useSupabase } from "@/hooks/useSupabase";
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/hooks/useUserContext";
 
 interface Message {
   id: string;

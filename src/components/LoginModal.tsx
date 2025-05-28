@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useUser } from '@/contexts/UserContext';
+import {useUser} from '../hooks/useUserContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { testCredentials } from '@/lib/testData';
 import { useNavigate } from 'react-router-dom';
