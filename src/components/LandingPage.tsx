@@ -34,36 +34,6 @@ export const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 px-6 py-4">
-        <div className="flex items-center justify-between max-w-7xl mx-auto">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                <Heart className="w-5 h-5 text-white" />
-              </div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                RefugeeAI
-              </h1>
-            </div>
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-              Global Relief Network
-            </Badge>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" onClick={() => setIsLoginOpen(true)}>
-              Sign In
-            </Button>
-            <Button 
-              onClick={() => setIsLoginOpen(true)}
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
-            >
-              Get Started
-            </Button>
-          </div>
-        </div>
-      </header>
 
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-6 py-16">

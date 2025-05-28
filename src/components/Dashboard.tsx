@@ -48,8 +48,8 @@ export const Dashboard = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 w-full min-h-screen p-4 start-anime md:px-6">
+      <div className="flex items-center justify-between start-anime">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Dashboard</h2>
           <p className="text-gray-600 mt-1">Global refugee support overview</p>
@@ -149,23 +149,6 @@ export const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/* Admin Setup Notice */}
-      <Card className="border-blue-200 bg-blue-50">
-        <CardContent className="p-6">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-              <Users className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-blue-900">Admin Access</h3>
-              <p className="text-sm text-blue-700">
-                To access admin features and create test accounts, please contact your system administrator or check the AdminSetup component.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };

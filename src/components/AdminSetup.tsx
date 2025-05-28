@@ -1,3 +1,5 @@
+// I DONT KNOW WHY THIS COMPONENT WAS CREATED CONSIDERING IT IS NOT BEING USED
+// DIDNT DELETE THO
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';

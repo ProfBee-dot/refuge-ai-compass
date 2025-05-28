@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Globe, Bell } from "lucide-react";
+import { Globe, Bell, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { UserProfileDropdown } from './UserProfileDropdown';
@@ -10,10 +10,20 @@ import { useUser } from '@/contexts/UserContext';
 export const Header = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const { isLoggedIn } = useUser();
+  
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+
+  const languages = [
+    { code: "en", name: "English" },
+    { code: "ar", name: "العربية" },
+    { code: "fa", name: "فارسی" },
+    { code: "fr", name: "Français" },
+    { code: "de", name: "Deutsch" },
+  ];
 
   return (
-    <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 px-6 py-4 sticky top-0 z-50 animate-fade-in">
-      <div className="flex items-center justify-between max-w-7xl mx-auto">
+    <header className="bg-white/80 backdrop-blur-sm w-full border-b border-blue-100 px-6 py-4 sticky top-0 z-50 animate-fade-in">
+      <div className="flex items-center justify-between w-full mx-auto">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2 hover:scale-105 transition-transform duration-300">
             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center hover:shadow-lg transition-all duration-300">
@@ -31,26 +41,38 @@ export const Header = () => {
         </div>
         
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="sm" className="text-blue-600 hover:bg-blue-50 hover:scale-105 transition-all duration-300">
+          
+          <label className="hidden md:flex items-center space-x-2 text-primary hover:scale-105 transition-all duration-300">
             <Globe className="w-4 h-4 mr-2" />
-            EN
-          </Button>
-          <Button variant="ghost" size="icon" className="relative hover:bg-blue-50 hover:scale-105 transition-all duration-300">
+            {/* <Languages className="w-4 h-4 text-gray-500" /> */}
+            <select 
+              value={selectedLanguage} 
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+              className="text-sm border rounded-md px-2 py-1"
+            >
+              {languages.map(lang => (
+                <option key={lang.code} value={lang.code}>{lang.name.toUpperCase()}</option>
+              ))}
+            </select>
+          </label>
+          
+          {/* <Button variant="ghost" size="icon" className="relative hover:bg-blue-50 hover:scale-105 transition-all duration-300">
             <Bell className="w-4 h-4" />
             <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 bg-red-500 text-xs animate-bounce">
               3
             </Badge>
-          </Button>
+          </Button> */}
           
           {isLoggedIn ? (
             <UserProfileDropdown />
           ) : (
             <Button 
               onClick={() => setIsLoginOpen(true)}
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              className="transition-all duration-300 hover:scale-105 hover:shadow-lg"
             >
-              Sign In
+              {window.location.pathname === '/' ? 'Join Our Mission' : 'Sign In'}
             </Button>
+    
           )}
         </div>
       </div>

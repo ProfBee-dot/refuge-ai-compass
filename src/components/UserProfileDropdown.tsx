@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { User, LogOut, Settings, Shield, Heart, Users, BarChart3 } from 'lucide-react';
+import { User, LogOut, Settings, Shield, Heart, Users, BarChart3, DoorClosed } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,6 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useUser } from '@/contexts/UserContext';
+import { NavLink } from 'react-router-dom';
 
 interface UserProfileDropdownProps {
   onManageUsers?: () => void;
@@ -108,6 +109,19 @@ export const UserProfileDropdown = ({ onManageUsers, onSettings }: UserProfileDr
           <Heart className="w-4 h-4 mr-3" />
           My Contributions
         </DropdownMenuItem>
+
+        
+        <DropdownMenuItem className="hover:bg-blue-50 transition-colors">
+          <DoorClosed  className="w-4 h-4 mr-3" />
+            <NavLink
+              to="/portals"
+              style={({ isActive }) => ({display: (isActive ? 'none' : '')})}
+            >
+            Portals
+          </NavLink>
+        </DropdownMenuItem>
+
+
         
         <DropdownMenuSeparator />
         <DropdownMenuItem 
