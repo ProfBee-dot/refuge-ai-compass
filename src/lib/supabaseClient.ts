@@ -15,9 +15,21 @@ const createMockClient = () => ({
     onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
   },
   from: () => ({
-    select: () => ({ eq: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } }) }) }),
-    insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } }) }) }),
-    update: () => ({ eq: () => Promise.resolve({ error: { message: 'Supabase not configured' } }) }),
+    select: () => ({
+      eq: () => ({
+        single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } }),
+        order: () => Promise.resolve({ data: [], error: { message: 'Supabase not configured' } })
+      }),
+      order: () => Promise.resolve({ data: [], error: { message: 'Supabase not configured' } })
+    }),
+    insert: () => ({
+      select: () => ({
+        single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } })
+      })
+    }),
+    update: () => ({
+      eq: () => Promise.resolve({ error: { message: 'Supabase not configured' } })
+    }),
   }),
 });
 

@@ -1,3 +1,4 @@
+
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
 export const useSupabase = () => {
@@ -25,7 +26,6 @@ export const useSupabase = () => {
 
   const getCampaigns = async () => {
     if (!isSupabaseConfigured) {
-      // Return mock data when Supabase is not configured
       return [];
     }
     
@@ -33,9 +33,9 @@ export const useSupabase = () => {
       .from('campaigns')
       .select('*')
       .order('created_at', { ascending: false });
-    
+      
     if (error) throw error;
-    return data;
+    return data || [];
   };
 
   // Chat messages
@@ -60,9 +60,9 @@ export const useSupabase = () => {
       .from('chat_messages')
       .select('*')
       .order('created_at', { ascending: true });
-    
+      
     if (error) throw error;
-    return data;
+    return data || [];
   };
 
   // Needs assessments
@@ -93,9 +93,9 @@ export const useSupabase = () => {
       .from('needs_assessments')
       .select('*, user_profiles(full_name, email)')
       .order('created_at', { ascending: false });
-    
+      
     if (error) throw error;
-    return data;
+    return data || [];
   };
 
   // Donations
@@ -124,7 +124,7 @@ export const useSupabase = () => {
 
   const updateCampaignRaisedAmount = async (campaignId: string) => {
     if (!isSupabaseConfigured) return;
-    // Get total donations for campaign
+    
     const { data: donations, error: donationsError } = await supabase
       .from('donations')
       .select('amount')
@@ -133,10 +133,9 @@ export const useSupabase = () => {
     
     if (donationsError) throw donationsError;
     
-    const totalRaised = donations.reduce((sum, donation) => sum + donation.amount, 0);
-    const donorCount = donations.length;
+    const totalRaised = donations?.reduce((sum, donation) => sum + donation.amount, 0) || 0;
+    const donorCount = donations?.length || 0;
     
-    // Update campaign
     const { error: updateError } = await supabase
       .from('campaigns')
       .update({ 

@@ -9,7 +9,11 @@ import {
   signUpUser, 
   signOutUser, 
   updateUserProfile 
+<<<<<<< HEAD
 } from '../services/authServices';
+=======
+} from '@/services/authService';
+>>>>>>> refs/remotes/origin/main
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
 
