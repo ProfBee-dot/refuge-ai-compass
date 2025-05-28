@@ -83,7 +83,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('user_profiles')
+        .from('profiles') // CHANGED to 'profiles'
         .select('id, email, full_name, role, organization, verified')
         .eq('id', userId)
         .single();
@@ -185,7 +185,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       if (data.user) {
         // Create user profile with selected role
         const { error: profileError } = await supabase
-          .from('user_profiles')
+          .from('profiles') // CHANGED to 'profiles'
           .insert({
             id: data.user.id,
             email: data.user.email,
@@ -270,7 +270,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       };
 
       const { error } = await supabase
-        .from('user_profiles')
+        .from('profiles') // CHANGED to 'profiles'
         .update(updates)
         .eq('id', user.id);
 
