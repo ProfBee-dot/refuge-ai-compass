@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/main
 import { Button } from "@/components/ui/button";
 import { Globe, Heart, Users, Shield, Home, LogOut } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";

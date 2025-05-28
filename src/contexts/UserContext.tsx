@@ -1,4 +1,3 @@
-
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
@@ -9,12 +8,7 @@ import {
   signUpUser, 
   signOutUser, 
   updateUserProfile 
-<<<<<<< HEAD
-} from '../services/authServices';
-=======
 } from '@/services/authService';
->>>>>>> refs/remotes/origin/main
-
 export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 interface UserProviderProps {
