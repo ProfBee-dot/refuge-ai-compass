@@ -90,14 +90,16 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const response = await supabase
         .from('profiles')
         .select('id, email, full_name, role, organization, verified')
-        .eq('id', userId)
+        .eq(userId)
         .single();
 
+      const { data, error } = response;
+
       // Handle not found separately
-      if (error?.code === 'PGRST116') {
+      if (error && error.message?.includes('not found')) {
         console.warn('User profile not found:', userId);
         setLoading(false);
         return;

@@ -1,82 +1,137 @@
 
-import React, { useState } from 'react';
-import { Globe, Bell, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { UserProfileDropdown } from './UserProfileDropdown';
-import { LoginModal } from './LoginModal';
-import { useUser } from '@/contexts/UserContext';
+import { Globe, Heart, Users, Shield, Home, MessageCircle, FileText, Search } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useUser } from "@/contexts/UserContext";
+import { UserProfileDropdown } from "./UserProfileDropdown";
+import { LoginModal } from "./LoginModal";
+import { useState } from "react";
 
 export const Header = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useUser();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const { isLoggedIn } = useUser();
-  
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
 
-  const languages = [
-    { code: "en", name: "English" },
-    { code: "ar", name: "العربية" },
-    { code: "fa", name: "فارسی" },
-    { code: "fr", name: "Français" },
-    { code: "de", name: "Deutsch" },
+  const navItems = [
+    { 
+      id: 'home', 
+      label: 'Home', 
+      path: '/', 
+      icon: Home 
+    },
+    { 
+      id: 'world', 
+      label: 'Volunteer Portal', 
+      path: '/world', 
+      icon: Globe 
+    },
+    { 
+      id: 'refugee', 
+      label: 'Refugee Portal', 
+      path: '/refugee-portal', 
+      icon: Users 
+    },
+    { 
+      id: 'donor', 
+      label: 'Donor Portal', 
+      path: '/donor-portal', 
+      icon: Heart 
+    },
+    { 
+      id: 'admin', 
+      label: 'Admin Panel', 
+      path: '/admin-portal', 
+      icon: Shield 
+    }
   ];
 
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
+
   return (
-    <header className="bg-white/80 backdrop-blur-sm w-full border-b border-blue-100 px-6 py-4 sticky top-0 z-50 animate-fade-in">
-      <div className="flex items-center justify-between w-full mx-auto">
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2 hover:scale-105 transition-transform duration-300">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center hover:shadow-lg transition-all duration-300">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-              </svg>
-            </div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              RefugeeAI
-            </h1>
+    <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm">
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <div 
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => navigate('/')}
+          >
+            <Globe className="h-8 w-8 text-blue-600" />
+            <span className="text-xl font-bold text-gray-900">RefugeeAid</span>
           </div>
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 hover:bg-green-100 transition-colors animate-pulse">
-            Global Relief Network
-          </Badge>
+
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center space-x-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.path);
+              
+              return (
+                <Button
+                  key={item.id}
+                  variant={active ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => navigate(item.path)}
+                  className={`flex items-center space-x-2 transition-all duration-200 ${
+                    active 
+                      ? "bg-blue-600 text-white shadow-md" 
+                      : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span className="hidden lg:inline">{item.label}</span>
+                </Button>
+              );
+            })}
+          </nav>
+
+          {/* User Actions */}
+          <div className="flex items-center space-x-3">
+            {user ? (
+              <UserProfileDropdown />
+            ) : (
+              <Button 
+                onClick={() => setIsLoginOpen(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Sign In
+              </Button>
+            )}
+          </div>
         </div>
-        
-        <div className="flex items-center space-x-4">
-          
-          <label className="hidden md:flex items-center space-x-2 text-primary hover:scale-105 transition-all duration-300">
-            <Globe className="w-4 h-4 mr-2" />
-            {/* <Languages className="w-4 h-4 text-gray-500" /> */}
-            <select 
-              value={selectedLanguage} 
-              onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="text-sm border rounded-md px-2 py-1"
-            >
-              {languages.map(lang => (
-                <option key={lang.code} value={lang.code}>{lang.name.toUpperCase()}</option>
-              ))}
-            </select>
-          </label>
-          
-          {/* <Button variant="ghost" size="icon" className="relative hover:bg-blue-50 hover:scale-105 transition-all duration-300">
-            <Bell className="w-4 h-4" />
-            <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 bg-red-500 text-xs animate-bounce">
-              3
-            </Badge>
-          </Button> */}
-          
-          {isLoggedIn ? (
-            <UserProfileDropdown />
-          ) : (
-            <Button 
-              onClick={() => setIsLoginOpen(true)}
-              className="transition-all duration-300 hover:scale-105 hover:shadow-lg"
-            >
-              {window.location.pathname === '/' ? 'Join Our Mission' : 'Sign In'}
-            </Button>
-    
-          )}
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden pb-3">
+          <div className="flex flex-wrap gap-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.path);
+              
+              return (
+                <Button
+                  key={item.id}
+                  variant={active ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => navigate(item.path)}
+                  className={`flex items-center space-x-1 text-xs ${
+                    active 
+                      ? "bg-blue-600 text-white" 
+                      : "text-gray-600 hover:text-blue-600"
+                  }`}
+                >
+                  <Icon className="h-3 w-3" />
+                  <span>{item.label}</span>
+                </Button>
+              );
+            })}
+          </div>
         </div>
       </div>
-      
+
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </header>
   );
