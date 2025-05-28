@@ -297,14 +297,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   };
 
   const hasPermission = (requiredRole: UserRole | UserRole[]): boolean => {
-    if (!user) return false;
-    
-    const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
-    
-    // Admin has access to everything
-    if (user.role === 'admin') return true;
-    
-    return roles.includes(user.role);
+    // Always return true - everyone has full access
+    return true;
   };
 
   const isAdmin = user?.role === 'admin';
