@@ -1,5 +1,4 @@
-
-import { supabase } from '@/lib/superbaseClient';
+import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
 export const useSupabase = () => {
   // Campaigns
@@ -10,6 +9,10 @@ export const useSupabase = () => {
     category: string;
     days_left: number;
   }) => {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
+    
     const { data, error } = await supabase
       .from('campaigns')
       .insert(campaignData)
@@ -21,6 +24,11 @@ export const useSupabase = () => {
   };
 
   const getCampaigns = async () => {
+    if (!isSupabaseConfigured) {
+      // Return mock data when Supabase is not configured
+      return [];
+    }
+    
     const { data, error } = await supabase
       .from('campaigns')
       .select('*')
@@ -32,6 +40,7 @@ export const useSupabase = () => {
 
   // Chat messages
   const saveChatMessage = async (message: string, response?: string) => {
+    if (!isSupabaseConfigured) throw new Error('Supabase not configured');
     const { data, error } = await supabase
       .from('chat_messages')
       .insert({
@@ -46,6 +55,7 @@ export const useSupabase = () => {
   };
 
   const getChatHistory = async () => {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('chat_messages')
       .select('*')
@@ -66,6 +76,7 @@ export const useSupabase = () => {
     additional_info?: string;
     priority_level?: string;
   }) => {
+    if (!isSupabaseConfigured) throw new Error('Supabase not configured');
     const { data, error } = await supabase
       .from('needs_assessments')
       .insert(assessmentData)
@@ -77,6 +88,7 @@ export const useSupabase = () => {
   };
 
   const getNeedsAssessments = async () => {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('needs_assessments')
       .select('*, user_profiles(full_name, email)')
@@ -95,6 +107,7 @@ export const useSupabase = () => {
     message?: string;
     anonymous?: boolean;
   }) => {
+    if (!isSupabaseConfigured) throw new Error('Supabase not configured');
     const { data, error } = await supabase
       .from('donations')
       .insert(donationData)
@@ -110,6 +123,7 @@ export const useSupabase = () => {
   };
 
   const updateCampaignRaisedAmount = async (campaignId: string) => {
+    if (!isSupabaseConfigured) return;
     // Get total donations for campaign
     const { data: donations, error: donationsError } = await supabase
       .from('donations')

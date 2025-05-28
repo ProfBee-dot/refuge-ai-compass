@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/lib/superbaseClient';
+import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
 export type UserRole = 'admin' | 'user' | 'volunteer' | 'donor';
 
@@ -50,6 +50,12 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
+        if (!isSupabaseConfigured) {
+          console.warn('Supabase not configured - running in mock mode');
+          setLoading(false);
+          return;
+        }
+
         // Get initial session
         const { data: { session } } = await supabase.auth.getSession();
         
@@ -80,10 +86,12 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   }, []);
 
   const fetchUserProfile = async (userId: string) => {
+    if (!isSupabaseConfigured) return;
+    
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('profiles') // CHANGED to 'profiles'
+        .from('profiles')
         .select('id, email, full_name, role, organization, verified')
         .eq('id', userId)
         .single();
@@ -122,6 +130,15 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   };
 
   const login = async (email: string, password: string): Promise<boolean> => {
+    if (!isSupabaseConfigured) {
+      toast({
+        title: "Authentication Disabled",
+        description: "Supabase is not configured. Running in demo mode.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
     try {
       setLoading(true);
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -171,6 +188,15 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     organization?: string,
     role: UserRole = 'user'
   ): Promise<boolean> => {
+    if (!isSupabaseConfigured) {
+      toast({
+        title: "Registration Disabled",
+        description: "Supabase is not configured. Running in demo mode.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
     try {
       setLoading(true);
       const { data, error } = await supabase.auth.signUp({
@@ -185,7 +211,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       if (data.user) {
         // Create user profile with selected role
         const { error: profileError } = await supabase
-          .from('profiles') // CHANGED to 'profiles'
+          .from('profiles')
           .insert({
             id: data.user.id,
             email: data.user.email,
@@ -237,6 +263,15 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   };
 
   const logout = async () => {
+    if (!isSupabaseConfigured) {
+      setUser(null);
+      toast({
+        title: "Signed out",
+        description: "You have been successfully signed out.",
+      });
+      return;
+    }
+
     try {
       setLoading(true);
       await supabase.auth.signOut();
@@ -258,7 +293,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   };
 
   const updateUser = async (userData: Partial<User>) => {
-    if (!user) return;
+    if (!user || !isSupabaseConfigured) return;
 
     try {
       setLoading(true);
@@ -270,7 +305,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       };
 
       const { error } = await supabase
-        .from('profiles') // CHANGED to 'profiles'
+        .from('profiles')
         .update(updates)
         .eq('id', user.id);
 
