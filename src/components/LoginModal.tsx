@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,11 +12,22 @@ import {
 } from '@/components/ui/dialog';
 import { useUser } from '@/contexts/UserContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { testCredentials } from '@/lib/testData';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+
+const postLoginDestination: {[key: string]: string} = {
+  'admin': '/admin-portal',
+  'volunteer': '/world',
+  'donor': '/donor-portal',
+  'user': '/refugee-portal'
+}
+
 
 export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -28,7 +39,15 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     organization: '',
     role: 'user' as 'admin' | 'user' | 'volunteer' | 'donor',
   });
-  const { login, signUp, loading } = useUser();
+  const { login, signUp, loading, user } = useUser();
+  const navigateTo = useNavigate();
+
+  useEffect(() => {
+    if (!isOpen && user){
+      navigateTo( postLoginDestination[user.role] );
+    }
+  }, [isOpen, user])
+
 
   const resetForm = () => {
     setFormData({ name: '', email: '', password: '', organization: '', role: 'user' });
@@ -53,13 +72,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
 
   // Updated test account credentials
   const fillTestCredentials = (role: string) => {
-    const credentials = {
-      admin: { email: 'admin@refugeeai.com', password: 'RefugeeAdmin123!' },
-      volunteer: { email: 'volunteer@refugeeai.com', password: 'Volunteer123!' },
-      donor: { email: 'donor@refugeeai.com', password: 'Donor123!' },
-      user: { email: 'user@refugeeai.com', password: 'User123!' }
-    };
-    const cred = credentials[role as keyof typeof credentials];
+    const cred = testCredentials[role as keyof typeof testCredentials];
     if (cred) {
       setFormData({
         ...formData,

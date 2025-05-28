@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, DollarSign, Package, Users, MapPin, Calendar, Eye, Download, Shield } from "lucide-react";
+import { Heart, DollarSign, Package, Users, MapPin, Calendar, Eye, Download, Shield, Plus, Wallet2Icon, Hand, HandHeart, HandHeartIcon, PlusIcon, MedalIcon } from "lucide-react";
+import { CampaignCreation } from "./CampaignCreation";
+import { WalletIntegration } from "./WalletIntegration";
+import { SmartFilter } from "./SmartFilter";
+
 
 interface Donation {
   id: number;
@@ -26,6 +30,8 @@ interface ImpactMetric {
 }
 
 export const DonorPortal = () => {
+  console.log("DonorPortal component rendered");
+  
   const [donations] = useState<Donation[]>([
     {
       id: 1,
@@ -125,50 +131,63 @@ export const DonorPortal = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-h-screen p-4 md:px-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Donor Transparency Portal</h2>
-          <p className="text-gray-600 mt-1">Track your impact with blockchain-verified transparency</p>
+          <h2 className="text-3xl font-bold text-gray-900">Donor Portal</h2>
+          <p className="text-gray-600 mt-1">Create campaigns, track impact, and manage donations</p>
         </div>
         <div className="flex items-center space-x-2">
           <Shield className="w-5 h-5 text-green-500" />
           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-            Blockchain Verified
+            Verified Donor
           </Badge>
         </div>
       </div>
 
-      {/* Impact Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {impactMetrics.map((metric) => {
-          const Icon = metric.icon;
-          return (
-            <Card key={metric.label}>
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-gray-50 rounded-lg">
-                    <Icon className={`w-5 h-5 ${metric.color}`} />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">{metric.label}</p>
-                    <p className="text-xl font-bold">{metric.value}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-
-      <Tabs defaultValue="donations" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="donations">My Donations</TabsTrigger>
-          <TabsTrigger value="impact">Impact Tracking</TabsTrigger>
-          <TabsTrigger value="blockchain">Blockchain Ledger</TabsTrigger>
+      <Tabs defaultValue="discover" className="space-y-4 w-full z-20">
+        <TabsList className="fixed flex gap-3 px-2 py-5 shadow-md items-center justify-between left-0 bottom-0 md:grid md:p-0 w-full md:grid-cols-6 md:relative">
+          <TabsTrigger className="flex gap-1" value="discover">
+            <Package className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+            Discover
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="create">
+            <PlusIcon className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+              Create Campaign
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="donations">
+            <HandHeartIcon className="w-5 flex-shrink-0 h-5 mr-1" />
+            <span className="hidden md:block">
+            My Donations
+            </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="wallet">
+            <Wallet2Icon className="w-5 flex-shrink-0 h-5 mr-1" />
+              <span className="hidden md:block">
+              Wallet
+              </span>
+          </TabsTrigger>
+          <TabsTrigger className="flex gap-1" value="impact">
+              <MedalIcon className="w-5 h-5 flex-shrink-0 mr-1" />
+              <span className="hidden md:block">
+              Impact
+              </span>
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="donations" className="space-y-4">
+        <TabsContent value="discover"  className="anime-start space-y-4">
+          <SmartFilter />
+        </TabsContent>
+
+        <TabsContent value="create"  className="anime-start space-y-4">
+          <CampaignCreation />
+        </TabsContent>
+
+        <TabsContent value="donations"  className="anime-start space-y-4">
           <div className="grid grid-cols-1 gap-4">
             {donations.map((donation) => (
               <Card key={donation.id} className="hover:shadow-lg transition-shadow">
@@ -222,14 +241,40 @@ export const DonorPortal = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="impact" className="space-y-4">
+        <TabsContent value="wallet"  className="anime-start space-y-4">
+          <WalletIntegration />
+        </TabsContent>
+
+        <TabsContent value="impact"  className="anime-start space-y-4">
+          
+          {/* Impact Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {impactMetrics.map((metric) => {
+              const Icon = metric.icon;
+              return (
+                <Card key={metric.label}>
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <Icon className={`w-5 h-5 ${metric.color}`} />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">{metric.label}</p>
+                        <p className="text-xl font-bold">{metric.value}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
                 <CardTitle>Geographic Impact</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div  className="anime-start space-y-4">
                   <div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium">Jordan</span>
@@ -260,7 +305,7 @@ export const DonorPortal = () => {
                 <CardTitle>Support Categories</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div  className="anime-start space-y-4">
                   <div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium">Medical</span>
@@ -292,7 +337,7 @@ export const DonorPortal = () => {
               <CardTitle>Success Stories</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
                   <h4 className="font-semibold text-blue-900">Ahmad Hassan's Recovery</h4>
                   <p className="text-blue-800 text-sm mt-1">
@@ -314,7 +359,7 @@ export const DonorPortal = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="blockchain" className="space-y-4">
+        <TabsContent value="blockchain"  className="anime-start space-y-4">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -323,7 +368,7 @@ export const DonorPortal = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div  className="anime-start space-y-4">
                 {blockchainEntries.map((entry) => (
                   <div key={entry.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
                     <div className="flex-1">

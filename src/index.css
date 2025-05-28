@@ -49,6 +49,11 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    size: 100vw 100vh;
   }
 
   .dark {
@@ -98,4 +103,20 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+.anime-start {
+  opacity: 1;
+  transform: translateY(0px);
+  transition: all .25s;
+}
+
+@starting-style {
+  .anime-start {
+    /* fade in upwards */
+    opacity: 0;
+    transform: translateY(20px);    
+  }
+    
 }
