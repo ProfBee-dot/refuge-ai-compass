@@ -26,21 +26,16 @@ export const useSupabase = () => {
 
   const getCampaigns = async () => {
     if (!isSupabaseConfigured) {
-      // Return mock data when Supabase is not configured
       return [];
     }
     
-    const response = await supabase
+    const { data, error } = await supabase
       .from('campaigns')
-      .select('*');
+      .select('*')
+      .order('created_at', { ascending: false });
       
-    if ('order' in response) {
-      const { data, error } = await response.order('created_at', { ascending: false });
-      if (error) throw error;
-      return data;
-    } else {
-      return [];
-    }
+    if (error) throw error;
+    return data || [];
   };
 
   // Chat messages
@@ -61,17 +56,13 @@ export const useSupabase = () => {
 
   const getChatHistory = async () => {
     if (!isSupabaseConfigured) return [];
-    const response = await supabase
+    const { data, error } = await supabase
       .from('chat_messages')
-      .select('*');
+      .select('*')
+      .order('created_at', { ascending: true });
       
-    if ('order' in response) {
-      const { data, error } = await response.order('created_at', { ascending: true });
-      if (error) throw error;
-      return data;
-    } else {
-      return [];
-    }
+    if (error) throw error;
+    return data || [];
   };
 
   // Needs assessments
@@ -98,17 +89,13 @@ export const useSupabase = () => {
 
   const getNeedsAssessments = async () => {
     if (!isSupabaseConfigured) return [];
-    const response = await supabase
+    const { data, error } = await supabase
       .from('needs_assessments')
-      .select('*, user_profiles(full_name, email)');
+      .select('*, user_profiles(full_name, email)')
+      .order('created_at', { ascending: false });
       
-    if ('order' in response) {
-      const { data, error } = await response.order('created_at', { ascending: false });
-      if (error) throw error;
-      return data;
-    } else {
-      return [];
-    }
+    if (error) throw error;
+    return data || [];
   };
 
   // Donations
@@ -137,32 +124,27 @@ export const useSupabase = () => {
 
   const updateCampaignRaisedAmount = async (campaignId: string) => {
     if (!isSupabaseConfigured) return;
-    // Get total donations for campaign
-    const donationsResponse = await supabase
+    
+    const { data: donations, error: donationsError } = await supabase
       .from('donations')
-      .select('amount');
-      
-    if ('eq' in donationsResponse) {
-      const { data: donations, error: donationsError } = await donationsResponse
-        .eq('campaign_id', campaignId)
-        .eq('payment_status', 'completed');
-      
-      if (donationsError) throw donationsError;
-      
-      const totalRaised = donations.reduce((sum, donation) => sum + donation.amount, 0);
-      const donorCount = donations.length;
-      
-      // Update campaign
-      const { error: updateError } = await supabase
-        .from('campaigns')
-        .update({ 
-          raised_amount: totalRaised,
-          donor_count: donorCount 
-        })
-        .eq('id', campaignId);
-      
-      if (updateError) throw updateError;
-    }
+      .select('amount')
+      .eq('campaign_id', campaignId)
+      .eq('payment_status', 'completed');
+    
+    if (donationsError) throw donationsError;
+    
+    const totalRaised = donations?.reduce((sum, donation) => sum + donation.amount, 0) || 0;
+    const donorCount = donations?.length || 0;
+    
+    const { error: updateError } = await supabase
+      .from('campaigns')
+      .update({ 
+        raised_amount: totalRaised,
+        donor_count: donorCount 
+      })
+      .eq('id', campaignId);
+    
+    if (updateError) throw updateError;
   };
 
   return {

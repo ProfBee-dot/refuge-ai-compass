@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Globe, Heart, Users, Shield, Home, MessageCircle, FileText, Search } from "lucide-react";
+import { Globe, Heart, Users, Shield, Home, LogOut } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 import { UserProfileDropdown } from "./UserProfileDropdown";
@@ -10,7 +10,7 @@ import { useState } from "react";
 export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useUser();
+  const { user, logout } = useUser();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const navItems = [
@@ -92,7 +92,18 @@ export const Header = () => {
           {/* User Actions */}
           <div className="flex items-center space-x-3">
             {user ? (
-              <UserProfileDropdown />
+              <div className="flex items-center space-x-2">
+                <UserProfileDropdown />
+                <Button 
+                  onClick={logout}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center space-x-2 text-red-600 hover:bg-red-50 hover:text-red-700"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </Button>
+              </div>
             ) : (
               <Button 
                 onClick={() => setIsLoginOpen(true)}

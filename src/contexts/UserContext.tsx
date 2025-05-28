@@ -93,7 +93,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       const response = await supabase
         .from('profiles')
         .select('id, email, full_name, role, organization, verified')
-        .eq(userId)
+        .eq('id', userId)
         .single();
 
       const { data, error } = response;
@@ -133,12 +133,19 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     if (!isSupabaseConfigured) {
-      toast({
-        title: "Authentication Disabled",
-        description: "Supabase is not configured. Running in demo mode.",
-        variant: "destructive",
+      // For demo purposes, create a mock user
+      setUser({
+        id: '1',
+        name: 'Demo User',
+        email: email,
+        role: 'user',
+        verified: true,
       });
-      return false;
+      toast({
+        title: "Demo Mode",
+        description: "Logged in with demo account",
+      });
+      return true;
     }
 
     try {
@@ -191,12 +198,20 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     role: UserRole = 'user'
   ): Promise<boolean> => {
     if (!isSupabaseConfigured) {
-      toast({
-        title: "Registration Disabled",
-        description: "Supabase is not configured. Running in demo mode.",
-        variant: "destructive",
+      // For demo purposes, create a mock user
+      setUser({
+        id: '1',
+        name: name,
+        email: email,
+        role: role,
+        organization: organization,
+        verified: true,
       });
-      return false;
+      toast({
+        title: "Demo Mode",
+        description: "Account created in demo mode",
+      });
+      return true;
     }
 
     try {
@@ -265,18 +280,11 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   };
 
   const logout = async () => {
-    if (!isSupabaseConfigured) {
-      setUser(null);
-      toast({
-        title: "Signed out",
-        description: "You have been successfully signed out.",
-      });
-      return;
-    }
-
     try {
       setLoading(true);
-      await supabase.auth.signOut();
+      if (isSupabaseConfigured) {
+        await supabase.auth.signOut();
+      }
       setUser(null);
       toast({
         title: "Signed out",

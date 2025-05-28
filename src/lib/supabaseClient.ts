@@ -20,9 +20,7 @@ const createMockClient = () => ({
         single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } }),
         order: () => Promise.resolve({ data: [], error: { message: 'Supabase not configured' } })
       }),
-      order: () => ({
-        eq: () => Promise.resolve({ data: [], error: { message: 'Supabase not configured' } })
-      })
+      order: () => Promise.resolve({ data: [], error: { message: 'Supabase not configured' } })
     }),
     insert: () => ({
       select: () => ({
