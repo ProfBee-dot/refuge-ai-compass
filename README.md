@@ -1,4 +1,6 @@
-# Welcome to your Lovable project
+# Welcome to RefugeesAid
+
+## RefugeesAid Documentation
 
 ## Project info
 
