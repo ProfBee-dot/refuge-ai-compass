@@ -2,6 +2,28 @@
 
 ## RefugeesAid Documentation
 
+## 1. Overview
+
+RefugeeAid is an AI-powered platform that streamlines humanitarian aid delivery by connecting refugees with resources, volunteers, and donations. It provides a centralized dashboard for tracking refugee cases, fundraising progress, and resource distribution while offering role-specific portals for Admins, Volunteers, Donors, and Refugees. It also create a seemless process for the distribution of resources to both individuals and refugees camps.
+
+## 2. Purpose
+
+The purpose of RefugeeAid is to leverage intelligent technology to manage, monitor, and optimize refugee aid activities globally. It enables:
+
+*  Real-time data insights
+
+*  Volunteer coordination
+
+*  Resource tracking and delivery
+
+*  Fundraising campaign management
+
+*  Automated refugee support via AI assistant
+
+## 3. 
+
+
+
 ## Project info
 
 **URL**: https://lovable.dev/projects/0280d5ef-2fe1-4a71-a152-191cd07b539e
