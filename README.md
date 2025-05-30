@@ -1,27 +1,68 @@
 # Welcome to RefugeesAid
 
-## RefugeesAid Documentation
+# RefugeesAid Documentation
 
-## 1. Overview
+# 1. Overview
 
 RefugeeAid is an AI-powered platform that streamlines humanitarian aid delivery by connecting refugees with resources, volunteers, and donations. It provides a centralized dashboard for tracking refugee cases, fundraising progress, and resource distribution while offering role-specific portals for Admins, Volunteers, Donors, and Refugees. It also create a seemless process for the distribution of resources to both individuals and refugees camps.
 
-## 2. Purpose
+# 2. Purpose
 
 The purpose of RefugeeAid is to leverage intelligent technology to manage, monitor, and optimize refugee aid activities globally. It enables:
 
 *  Real-time data insights
-
 *  Volunteer coordination
-
 *  Resource tracking and delivery
-
 *  Fundraising campaign management
-
 *  Automated refugee support via AI assistant
 
-## 3. 
+# 3. Features
 
+## 🌐 Home Page
+
+* Mission statement and platform summary
+* Feature tiles: AI Assistant, Fundraising, Community Support, Secure Platform
+* Live statistics: Active Cases, Funds Raised, Resources Delivered
+* Call-to-action for new users
+
+## 🧑‍💼 Admin Panel
+
+* Overview of platform analytics
+* Manage approvals, alerts, users, and campaigns
+* Metrics: Pending approvals, active campaigns, registered refugees, critical alerts
+* Analytics: User satisfaction and response times
+
+## 🤝 Volunteer Portal
+
+* Dashboard for case tracking and regional impact
+* Real-time updates: New cases, donations, deliveries, alerts
+* Visual insights on regional activity (Middle East, Europe, Africa)
+
+## 🔐 Donor Portal
+
+* Launch/manage fundraising campaigns
+* View donation history
+* Track impact of contributions
+* Smart Campaign Filter
+* Crypto Wallet to manage donations
+* Your personal Impact
+
+## 🧍 Refugee Portal
+
+* AI chat-based assistance
+* Submit aid requests
+* Monitor delivery status
+* Access support resources
+
+# 4. User Roles
+
+* Admin: Full access to all system operations and analytics
+* Volunteer: Manage cases, deliveries, and regional outreach
+* Donor: Fund and monitor humanitarian campaigns
+* Refugee: Receive support, chat with AI assistant, request aid
+
+##
+##
 
 
 ## Project info
