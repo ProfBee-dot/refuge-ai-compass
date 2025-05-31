@@ -4,24 +4,96 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RefugeeAI - Intelligent Humanitarian Support Platform</title>
+    <title>RefugeeAid - Intelligent Humanitarian Support Platform</title>
     <meta name="description" content="AI-powered humanitarian aid platform for refugee support, fundraising, and resource coordination" />
-    <meta name="author" content="RefugeeAI Team" />
+    <meta name="author" content="RefugeeAid Team" />
 
-    <meta property="og:title" content="RefugeeAI - Intelligent Humanitarian Support" />
+    <meta property="og:title" content="RefugeeAid - Intelligent Humanitarian Support" />
     <meta property="og:description" content="AI-powered platform transforming refugee support through intelligent coordination" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@refugeeai" />
+    <meta name="twitter:site" content="@Refugeeaid" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <link preload="/logo.png" as="image" />
+
+    
+    <style>
+      #root {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity .3s ease-in-out;
+      }
+
+      #pre-loading {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #efefef;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      #pre-loading img {
+        width: 150px;
+        height: 150px;
+
+        &.flicker {
+          animation: flicker .5s both alternate-reverse infinite;
+        }
+      }
+      
+      #pre-loading footer {
+        position: absolute;
+        font-size: 16px;
+        color: #0f172a;
+        bottom: 10%;
+      }
+
+      @keyframes flicker {
+        from { opacity: 0.6 }
+        to { opacity: 0.8 }
+      }
+      </style>
   </head>
 
   <body>
     <div id="root"></div>
+
+    <div id="pre-loading">
+      <img src="/logo.png" class="flicker" alt="loading..." style="object-fit: contain" />
+      <footer>
+        &copy; 2025 RefugeeAI 
+      </footer>
+    </div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
+
+  
+  <script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const renderRoot = document.getElementById("root");
+      const loader = document.getElementById("pre-loading");
+      const flickers = loader.querySelectorAll(".flicker");
+
+      flickers.forEach((el) => {
+        el.classList.remove("flicker");
+      });
+
+      setTimeout(() => {
+        loader.style.display = "none";
+        root.style.opacity = root.style.visibility = "";
+
+      }, 500);
+    });
+  </script>
 </html>

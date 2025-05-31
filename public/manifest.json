@@ -1,0 +1,28 @@
+{
+  "short_name": "RefugeeAid",
+  "name": "RefugeeAid Compass",
+  "lang": "en-US",
+  "description": "AI-powered humanitarian aid platform for refugee support, fundraising, and resource coordination.",
+  "icons": [
+    {
+      "src": "/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/refugee-portal",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#efefef",
+  "background_color": "#efefef",
+  "related_applications": [{
+    "platform": "webapp",
+    "url": "https://refuge-ai-compass.vercel.app/manifest.json"
+  }],
+  "prefer_related_applications": false
+}
