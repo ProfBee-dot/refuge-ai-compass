@@ -1,5 +1,6 @@
 import { usePWA } from '@/contexts/PWAContext';
 import { useState } from 'react';
+import { Button } from './ui/button';
 
 export const InstallDialog = () => {
     const [isOfferOpen, setOfferOpen] = useState(true);
@@ -18,9 +19,9 @@ export const InstallDialog = () => {
                 <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
                     Cancel
                 </button>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                <Button className="px-4 py-2">
                     Install
-                </button>
+                </Button>
                 </div>
             </div>
         </div>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { User, LogOut, Settings, Shield, Heart, Users, BarChart3, DoorClosed } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { useUser } from '@/contexts/UserContext';
+import { useUser } from '@/hooks/useUserContext';
 import { NavLink } from 'react-router-dom';
 
 interface UserProfileDropdownProps {
@@ -135,3 +134,4 @@ export const UserProfileDropdown = ({ onManageUsers, onSettings }: UserProfileDr
     </DropdownMenu>
   );
 };
+export default UserProfileDropdown;

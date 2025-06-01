@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageCircle, Upload, FileText, Heart, Languages, User, AlertTriangle, Notebook, BotIcon } from "lucide-react";
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/hooks/useUserContext";
 import { ChatbotInterface } from "@/components/ChatbotInterface";
 import { AidRequestForm } from "@/components/AidRequestForm";
 import { DocumentUpload } from "@/components/DocumentUpload";

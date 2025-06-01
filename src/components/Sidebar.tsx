@@ -1,7 +1,6 @@
-
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/hooks/useUserContext";
 
 interface MenuItem {
   id: string;
@@ -17,13 +16,10 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ activeTab, setActiveTab, menuItems }: SidebarProps) => {
-  const { user, hasPermission } = useUser();
+  const { user } = useUser();
 
-  // Filter menu items based on user permissions
-  const filteredMenuItems = menuItems.filter(item => {
-    if (!item.requiredRoles || item.requiredRoles.length === 0) return true;
-    return hasPermission(item.requiredRoles as any);
-  });
+  // Show all menu items - no role filtering
+  const filteredMenuItems = menuItems;
 
   return (
     <aside className="fixed left-0 top-20 h-[calc(100vh-5rem)] w-64 bg-white/80 backdrop-blur-sm border-r border-blue-100 p-4 animate-slide-in-left">

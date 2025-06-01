@@ -1,5 +1,5 @@
 
-import { supabase } from '@/lib/superbaseClient';
+import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
 export const useSupabase = () => {
   // Campaigns
@@ -10,6 +10,10 @@ export const useSupabase = () => {
     category: string;
     days_left: number;
   }) => {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured');
+    }
+    
     const { data, error } = await supabase
       .from('campaigns')
       .insert(campaignData)
@@ -21,17 +25,22 @@ export const useSupabase = () => {
   };
 
   const getCampaigns = async () => {
+    if (!isSupabaseConfigured) {
+      return [];
+    }
+    
     const { data, error } = await supabase
       .from('campaigns')
       .select('*')
       .order('created_at', { ascending: false });
-    
+      
     if (error) throw error;
-    return data;
+    return data || [];
   };
 
   // Chat messages
   const saveChatMessage = async (message: string, response?: string) => {
+    if (!isSupabaseConfigured) throw new Error('Supabase not configured');
     const { data, error } = await supabase
       .from('chat_messages')
       .insert({
@@ -46,13 +55,14 @@ export const useSupabase = () => {
   };
 
   const getChatHistory = async () => {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('chat_messages')
       .select('*')
       .order('created_at', { ascending: true });
-    
+      
     if (error) throw error;
-    return data;
+    return data || [];
   };
 
   // Needs assessments
@@ -66,6 +76,7 @@ export const useSupabase = () => {
     additional_info?: string;
     priority_level?: string;
   }) => {
+    if (!isSupabaseConfigured) throw new Error('Supabase not configured');
     const { data, error } = await supabase
       .from('needs_assessments')
       .insert(assessmentData)
@@ -77,13 +88,14 @@ export const useSupabase = () => {
   };
 
   const getNeedsAssessments = async () => {
+    if (!isSupabaseConfigured) return [];
     const { data, error } = await supabase
       .from('needs_assessments')
       .select('*, user_profiles(full_name, email)')
       .order('created_at', { ascending: false });
-    
+      
     if (error) throw error;
-    return data;
+    return data || [];
   };
 
   // Donations
@@ -95,6 +107,7 @@ export const useSupabase = () => {
     message?: string;
     anonymous?: boolean;
   }) => {
+    if (!isSupabaseConfigured) throw new Error('Supabase not configured');
     const { data, error } = await supabase
       .from('donations')
       .insert(donationData)
@@ -110,7 +123,8 @@ export const useSupabase = () => {
   };
 
   const updateCampaignRaisedAmount = async (campaignId: string) => {
-    // Get total donations for campaign
+    if (!isSupabaseConfigured) return;
+    
     const { data: donations, error: donationsError } = await supabase
       .from('donations')
       .select('amount')
@@ -119,10 +133,9 @@ export const useSupabase = () => {
     
     if (donationsError) throw donationsError;
     
-    const totalRaised = donations.reduce((sum, donation) => sum + donation.amount, 0);
-    const donorCount = donations.length;
+    const totalRaised = donations?.reduce((sum, donation) => sum + donation.amount, 0) || 0;
+    const donorCount = donations?.length || 0;
     
-    // Update campaign
     const { error: updateError } = await supabase
       .from('campaigns')
       .update({ 

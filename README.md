@@ -1,4 +1,101 @@
-# Welcome to your Lovable project
+# Welcome to RefugeesAid
+
+# RefugeesAid Documentation
+
+# 1. Overview
+
+RefugeeAid is an AI-powered platform that streamlines humanitarian aid delivery by connecting refugees with resources, volunteers, and donations. It provides a centralized dashboard for tracking refugee cases, fundraising progress, and resource distribution while offering role-specific portals for Admins, Volunteers, Donors, and Refugees. It also create a seemless process for the distribution of resources to both individuals and refugees camps.
+
+# 2. Purpose
+
+The purpose of RefugeeAid is to leverage intelligent technology to manage, monitor, and optimize refugee aid activities globally. It enables:
+
+*  Real-time data insights
+*  Volunteer coordination
+*  Resource tracking and delivery
+*  Fundraising campaign management
+*  Automated refugee support via AI assistant
+
+# 3. Features
+
+## 🌐 Home Page
+
+* Mission statement and platform summary
+* Feature tiles: AI Assistant, Fundraising, Community Support, Secure Platform
+* Live statistics: Active Cases, Funds Raised, Resources Delivered
+* Call-to-action for new users
+
+## 🧑‍💼 Admin Panel
+
+* Overview of platform analytics
+* Manage approvals, alerts, users, and campaigns
+* Metrics: Pending approvals, active campaigns, registered refugees, critical alerts
+* Analytics: User satisfaction and response times
+
+## 🤝 Volunteer Portal
+
+* Dashboard for case tracking and regional impact
+* Real-time updates: New cases, donations, deliveries, alerts
+* Visual insights on regional activity (Middle East, Europe, Africa)
+
+## 🔐 Donor Portal
+
+* Launch/manage fundraising campaigns
+* View donation history
+* Track impact of contributions
+* Smart Campaign Filter
+* Crypto Wallet to manage donations
+* Your personal Impact
+
+## 🧍 Refugee Portal
+
+* AI chat-based assistance
+* Submit aid requests
+* Monitor delivery status
+* Access support resources
+
+# 4. User Roles
+
+* Admin: Full access to all system operations and analytics
+* Volunteer: Manage cases, deliveries, and regional outreach
+* Donor: Fund and monitor humanitarian campaigns
+* Refugee: Receive support, chat with AI assistant, request aid
+
+# 5. Technologies Used
+
+* Frontend: React.js with TailwindCSS
+* Backend: Node.js with Express
+* Database: MongoDB / Firebase
+* AI Assistant: Integrated GPT-based chatbot
+* Authentication: Role-based access with secure login
+* Analytics: Custom dashboards and charts
+
+# 6. SCreens
+
+## Home
+![image](https://github.com/user-attachments/assets/b4e1d2b7-9dd2-46b5-8ed8-130881392f15)
+## Volunteer Portal
+![image](https://github.com/user-attachments/assets/3fe71f7a-c2db-42ff-ac94-9e9d8ea3e92b)
+## Refugee Portal
+![image](https://github.com/user-attachments/assets/0b79885c-8697-4b8c-80f8-3ce78d1fcb17)
+## Donor Portal
+![image](https://github.com/user-attachments/assets/ac6db782-0030-422f-92d7-8552e1e11992)
+## Admin Portal
+![image](https://github.com/user-attachments/assets/b9588164-5a85-41de-9b89-d220937659d1)
+
+
+
+##
+# Contributors
+
+* Product Design: Adebisi Jethro 
+* Frontend Dev: David Uwagbale 
+* Backend Dev: Zoaka Bata Bukar 
+* AI Integration: Keshinro Mus'ab
+
+Project Lead: Alfred Itodole
+##
+
 
 ## Project info
 

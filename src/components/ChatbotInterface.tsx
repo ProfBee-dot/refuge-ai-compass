@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Mic, Heart, Loader2 } from "lucide-react";
 import { useSupabase } from "@/hooks/useSupabase";
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/hooks/useUserContext";
 
 interface Message {
   id: string;
@@ -58,10 +58,10 @@ export const ChatbotInterface = () => {
     try {
       const history = await getChatHistory();
       const formattedMessages: Message[] = [];
-      
+
       // Add welcome message
       formattedMessages.push(getWelcomeMessage());
-      
+
       // Add chat history
       history?.forEach((chat: any) => {
         formattedMessages.push({
@@ -70,7 +70,7 @@ export const ChatbotInterface = () => {
           content: chat.message,
           timestamp: new Date(chat.created_at),
         });
-        
+
         if (chat.response) {
           formattedMessages.push({
             id: `bot-${chat.id}`,
@@ -81,7 +81,7 @@ export const ChatbotInterface = () => {
           });
         }
       });
-      
+
       setMessages(formattedMessages);
     } catch (error) {
       console.error('Error loading chat history:', error);
@@ -94,7 +94,7 @@ export const ChatbotInterface = () => {
   const getWelcomeMessage = (): Message => ({
     id: 'welcome',
     type: 'bot',
-    content: user 
+    content: user
       ? `Hello ${user.name}! I'm your AI assistant for refugee support. I can help you register your needs, find resources, or connect you with support services. How can I assist you today?`
       : "Hello! I'm your AI assistant for refugee support. I can help you register your needs, find resources, or connect you with support services. Please sign in to save your conversation history. How can I assist you today?",
     timestamp: new Date(),
@@ -114,49 +114,51 @@ export const ChatbotInterface = () => {
       setInputMessage("");
       setIsTyping(true);
 
-      // Simulate bot response
-      setTimeout(async () => {
-        const botResponse = getBotResponse(inputMessage);
+      try {
+        const response = await fetch('/api/chat', { // Your FastAPI endpoint
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: inputMessage }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
         const botMessage: Message = {
           id: `bot-${Date.now()}`,
           type: 'bot',
-          content: botResponse,
+          content: data.response,
           timestamp: new Date(),
-          language: selectedLanguage
+          language: selectedLanguage // Or you might want to handle language differently
         };
-        
+
         setMessages(prev => [...prev, botMessage]);
-        setIsTyping(false);
 
         // Save to database if user is logged in
         if (user) {
           try {
-            await saveChatMessage(inputMessage, botResponse);
+            await saveChatMessage(inputMessage, data.response);
           } catch (error) {
             console.error('Error saving chat message:', error);
           }
         }
-      }, 1500);
-    }
-  };
-
-  const getBotResponse = (userInput: string): string => {
-    const input = userInput.toLowerCase();
-    
-    if (input.includes('register') || input.includes('family')) {
-      return "I'll help you register your family. Please provide: 1) Number of family members, 2) Current location, 3) Primary needs (food, shelter, medical, etc.). What's your family size?";
-    } else if (input.includes('medical') || input.includes('health')) {
-      return "I understand you need medical assistance. I can help connect you with healthcare services. Is this an emergency? Please describe the medical situation briefly.";
-    } else if (input.includes('food')) {
-      return "I can help you find food assistance in your area. What's your current location? Also, do you have any dietary restrictions or special needs I should know about?";
-    } else if (input.includes('legal')) {
-      return "Legal aid is available through our partner organizations. I can connect you with immigration lawyers and legal advocates. What type of legal assistance do you need?";
-    } else if (input.includes('housing') || input.includes('shelter')) {
-      return "Housing support is crucial. I can help you find temporary shelter or longer-term housing solutions. How many people need accommodation and what's your current situation?";
-    } else if (input.includes('emergency')) {
-      return "⚠️ This seems urgent. I'm connecting you with emergency services. Please provide your exact location and describe the emergency situation. A human agent will join this chat shortly.";
-    } else {
-      return "I understand you need assistance. Can you tell me more about your specific situation? I can help with registration, finding resources, or connecting you with the right support services.";
+      } catch (error) {
+        console.error('Error sending message to chatbot API:', error);
+        const errorMessage: Message = {
+          id: `error-${Date.now()}`,
+          type: 'bot',
+          content: 'Sorry, I encountered an error communicating with the AI.',
+          timestamp: new Date(),
+          language: selectedLanguage
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      } finally {
+        setIsTyping(false);
+      }
     }
   };
 
@@ -181,7 +183,7 @@ export const ChatbotInterface = () => {
           <p className="text-gray-600 mt-1">Multilingual support for refugees</p>
         </div>
         <div className="flex items-center space-x-4">
-          <select 
+          <select
             value={selectedLanguage}
             onChange={(e) => setSelectedLanguage(e.target.value)}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
@@ -260,7 +262,7 @@ export const ChatbotInterface = () => {
                 )}
               </div>
             </ScrollArea>
-            
+
             <div className="p-4 border-t">
               <div className="flex space-x-2">
                 <Input

@@ -6,9 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Wallet, CreditCard, Bitcoin, Shield, Plus, Eye, EyeOff, ReceiptIcon } from "lucide-react";
+import { Wallet, CreditCard, Bitcoin, Shield, Plus, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { TabsList, TabsTrigger } from "./ui/tabs";
 
 interface WalletBalance {
   currency: string;
@@ -50,14 +49,6 @@ export const WalletIntegration = () => {
       {/* Wallet Overview */}
       <Card>
         <CardHeader>
-          <TabsList>
-            <TabsTrigger className="flex gap-1" value="blockchain">
-              <ReceiptIcon className="w-5 flex-shrink-0 h-5 mr-1" />
-              <span className="hidden md:block">
-                See Ledger
-              </span>
-            </TabsTrigger>
-          </TabsList>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Wallet className="w-5 h-5 text-blue-500" />

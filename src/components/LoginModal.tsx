@@ -10,10 +10,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useUser } from '@/contexts/UserContext';
+import {useUser} from '../hooks/useUserContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { testCredentials } from '@/lib/testData';
 import { useNavigate } from 'react-router-dom';
+
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ const postLoginDestination: {[key: string]: string} = {
 
 export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -60,6 +62,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     let success = false;
     if (isLogin) {
       success = await login(formData.email, formData.password);
+      navigate('/world')
     } else {
       success = await signUp(formData.email, formData.password, formData.name, formData.organization, formData.role);
     }
