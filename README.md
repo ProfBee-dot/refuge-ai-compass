@@ -92,8 +92,7 @@ The purpose of RefugeeAid is to leverage intelligent technology to manage, monit
 * Frontend Dev: David Uwagbale 
 * Backend Dev: Zoaka Bata Bukar 
 * AI Integration: Keshinro Mus'ab
-
-Project Lead: Alfred Itodole
+* Project Lead: Alfred Itodole
 ##
 
 
