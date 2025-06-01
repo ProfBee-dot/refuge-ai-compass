@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from api.knowledge_base import faq_data
 from api.app import generate_response  # We'll need to adapt our chatbot logic for API use
+from api.reddit import bot
 
 app = FastAPI()
 
@@ -31,3 +32,21 @@ async def chat(request: ChatRequest):
     user_message = request.message
     chatbot_response = generate_response(user_message, faq_data) ## faq_data for nltk
     return ChatResponse(response=chatbot_response)
+
+
+
+class AidRequest(BaseModel):
+    details: str
+    targets_users: list
+    target_groups: list 
+
+
+@app.post("/request-aid")
+def request_aid(request: AidRequest):
+    try:
+        bot.make_post( request )
+
+    except Exception as err:
+        return {"message": f"Error: {err}"}
+    
+    return {"message": "SUccessfully made posts"}

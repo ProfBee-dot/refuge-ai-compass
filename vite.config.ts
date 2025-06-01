@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => ({
       input: {
         main: resolve(__dirname, 'index.html'),
         worker: resolve(__dirname, 'src/service-worker.js'),
+        emergency: path.resolve(__dirname, 'offline.html')
         
       },
       output: {

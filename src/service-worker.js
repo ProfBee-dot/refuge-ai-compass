@@ -9,27 +9,42 @@ async function cacheAssets() {
 
     // Fetch the manifest.json file
     let assetsToCache = [];
-    try {
-        const response = await fetch('/.vite/manifest.json');
-        if (!response.ok) {
-            throw new Error('Failed to fetch manifest.json');
-        }
-        const manifest = await response.json();
-        assetsToCache = Object.values(manifest).map(entry => entry.file);
-    } catch (error) {
-        console.error('Error fetching manifest:', error);
-    }
+    // try {
+    //     const response = await fetch('/.vite/manifest.json');
+    //     if (!response.ok) {
+    //         throw new Error('Failed to fetch manifest.json');
+    //     }
+    //     const manifest = await response.json();
+    //     assetsToCache = Object.values(manifest).map(entry => entry.file);
+    // } catch (error) {
+    //     console.error('Error fetching manifest:', error);
+    // }
 
     // Add additional static assets (e.g., HTML files)
-    const staticAssets = [
-        '/index.html',
-        '/offline.html', // included offline file
+    // const staticAssets = [
+    //     '/index.html',
+    //     '/offline.html', // included offline file
+    //     '/logo.png',
+    //     '/manifest.json',
+    //     '/assets/emergency-main.[hash].js',
+    // ];
+
+    
+      // Match emergency JS dynamically
+      const manifest = await fetch('/.vite/manifest.json').then(r => r.json());
+      const emergencyJs = Object.values(manifest).find((asset) =>
+        asset.file?.startsWith('assets/emergency-main-')
+      )?.file;
+
+      const urlsToCache = [
+        '/offline.html',
         '/logo.png',
-        '/manifest.json'
-    ];
+        '/manifest.json',
+        emergencyJs ? `/${emergencyJs}` : null
+      ].filter(Boolean);
 
     // Cache all assets
-    return cache.addAll([...staticAssets, ...assetsToCache]);
+    return cache.addAll(urlsToCache);
 }
 
   
