@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './EmergencyInfoOfflinePage.css';
 import { getEmergencyInfo } from '../lib/emergencydb';
 
 interface EmergencySection {
