@@ -2,6 +2,9 @@
 
 RefugeeAid is an AI-powered multilingual platform designed to assist refugees by intelligently coordinating fundraising, distributing critical supplies, and facilitating emotional, legal, and integration support—all in one agentic system. The platform connects NGOs, donors, volunteers, and refugees in real-time, with built-in support for offline operation in low-connectivity zones.
 
+
+[View live](https://refuge-ai-compass-47.vercel.app)
+
 ---
 
 ## 🧨 Problem Statement
@@ -109,7 +112,28 @@ RefugeeAid bridges the gap between need and aid by acting as a digital social ag
 
 ---
 
-## 🚀 Quick Start Guide
+## Use Guide
+!(screenshots/home-screenshot)
+
+!(screenshots/chat-screenshot)
+
+### Registration and Login 
+Users sign in and have privileges and access based on their roles.
+There are 4 levels of access:
+- General / World access
+- Donor Access
+- User (Refugee) Access
+- Admin Access
+
+### Setup and Info 
+Users can register their info and upload documents.
+Access to AI powered chat features to aid and support as well as inform the of possible jobs or emergencies 
+
+### Emergency View 
+When Offline or in case of poor connection access to last Retrieved important information is made available for use.
+
+
+## 🚀 Quick Setup Guide
 
 ### Prerequisites
 
