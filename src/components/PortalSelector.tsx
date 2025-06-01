@@ -60,8 +60,10 @@ export const PortalSelector = () => {
   ];
 
   const canAccessPortal = (portal: any) => {
-    // Everyone can access all portals now
-    return true;
+    if (portal.public) return true;
+    if (!user) return false;
+    if (!portal.roles) return true;
+    return portal.roles.includes(user.role);
   };
 
   return (
@@ -87,7 +89,9 @@ export const PortalSelector = () => {
             return (
               <Card 
                 key={portal.id} 
-                className={`hover:shadow-lg transition-all duration-200 cursor-pointer ${portal.borderColor}`}
+                className={`hover:shadow-lg transition-all duration-200 ${
+                  hasAccess ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed'
+                } ${portal.borderColor}`}
               >
                 <CardContent className="p-6">
                   <div className={`w-12 h-12 rounded-lg ${portal.bgColor} flex items-center justify-center mb-4`}>
@@ -98,13 +102,19 @@ export const PortalSelector = () => {
                   <p className="text-gray-600 mb-4">{portal.description}</p>
                   
                   <div className="flex items-center justify-between">
-                    <Button onClick={() => navigate(portal.route)}>
-                      Enter Portal
+                    <Button 
+                      onClick={() => hasAccess && navigate(portal.route)}
+                      disabled={!hasAccess}
+                      className={hasAccess ? "" : "cursor-not-allowed"}
+                    >
+                      {hasAccess ? "Enter Portal" : "Access Restricted"}
                     </Button>
                     
-                    <Badge variant="outline" className="text-xs">
-                      Open Access
-                    </Badge>
+                    {!portal.public && (
+                      <Badge variant="outline" className="text-xs">
+                        {portal.roles?.join(", ") || "All Users"}
+                      </Badge>
+                    )}
                   </div>
                 </CardContent>
               </Card>
