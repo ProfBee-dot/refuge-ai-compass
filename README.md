@@ -3,7 +3,7 @@
 RefugeeAid is an AI-powered multilingual platform designed to assist refugees by intelligently coordinating fundraising, distributing critical supplies, and facilitating emotional, legal, and integration support—all in one agentic system. The platform connects NGOs, donors, volunteers, and refugees in real-time, with built-in support for offline operation in low-connectivity zones.
 
 
-[View live](https://refuge-ai-compass-47.vercel.app)
+[View live](https://refuge-ai-compass.vercel.app)
 
 ---
 
@@ -143,8 +143,8 @@ When Offline or in case of poor connection access to last Retrieved important in
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/refugeaid.git
-cd refugeaid
+git clone https://github.com/davidtimi1/refuge-ai-compass-47.git
+cd refuge-ai-compass-47
 ```
 
 ### Install Dependencies
@@ -191,17 +191,22 @@ npm run dev
 
 ## 🎥 Demo & Resources
 
+### 📸 Screenshots
+![portals view](screenshots/portals-screenshot.jpg)
+![home view](screenshots/home-screenshot.jpg)
+![chat view](screenshots/chat-screenshot.jpg)
+
 ### 📹 Video Demo
 
 [Watch Demo on YouTube](https://www.youtube.com/refugeaid-demo)
 
 ### 📊 Pitch Deck
 
-[View Pitch Deck (Google Slides)](https://docs.google.com/presentation/d/REFUGEAID-PITCH)
+[View Pitch Deck (Google Slides)](screenshots/pitch-deck.pdf)
 
 ### 🌐 Live Application
 
-[Try the App](https://refugeaid.vercel.app)
+[Try the App](https://refuge-ai-compass.vercel.app)
 
 ---
 
