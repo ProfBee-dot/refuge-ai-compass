@@ -198,7 +198,7 @@ npm run dev
 
 ### 📹 Video Demo
 
-[Watch Demo on YouTube](https://www.youtube.com/refugeaid-demo)
+[Watch Demo on youtube](https://youtu.be/lsFeSM_KoHE)
 
 ### 📊 Pitch Deck
 
