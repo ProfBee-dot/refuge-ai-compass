@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { LoginModal } from './LoginModal';
-import { Heart, Users, Globe, Shield, MessageCircle, DollarSign } from 'lucide-react';
+import {  Users, Globe, Shield, MessageCircle, DollarSign } from 'lucide-react';
+import Footer from './Footer';
 
 export const LandingPage = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -123,6 +123,8 @@ export const LandingPage = () => {
           </Card>
         </div>
       </main>
+
+      <Footer />
 
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </div>

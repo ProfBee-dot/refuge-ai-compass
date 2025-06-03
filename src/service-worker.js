@@ -60,12 +60,14 @@ self.addEventListener('install', (event) => {
 
 
 self.addEventListener('fetch', (event) => {
-    // We only want to call event.respondWith() if this is a navigation request
-    // for an HTML page.
     const {request} = event;
     event.respondWith(
-      fetch(request).catch(() =>
-        caches.match(OFFLINE_URL)
+      fetch(request).catch(async() => {
+        const cachedResponse = await caches.match(request);
+        const offlineView = await caches.match(OFFLINE_URL);
+
+        return cachedResponse ?? offlineView;
+      }
       )
     );
 
