@@ -87,6 +87,7 @@ export const signUpUser = async (
   return data;
 };
 
+//sign out user
 export const signOutUser = async () => {
   if (isSupabaseConfigured) {
     await supabase.auth.signOut();
