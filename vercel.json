@@ -2,18 +2,10 @@
   "version": 2,
   "builds": [
     {
-      "src": "src",
-      "use": "@vercel/node",
-      "config": {
-        "zeroConfig": true
-      }
-    },
-    {
-      "src": "api",
+      "src": "api/*.py",
       "use": "@vercel/python",
       "config": {
-        "runtime": "python3.12",
-        "wsgi": "api:app"
+        "runtime": "python3.12"
       }
     }
   ],
@@ -24,7 +16,13 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/src/$1"
+      "dest": "/"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
