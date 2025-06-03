@@ -24,9 +24,6 @@ export interface UserContextType {
   loading: boolean;
 }
 
-
-export type UserRole = 'admin' | 'user' | 'volunteer' | 'donor';
-
 export interface User {
   id: string;
   name: string;

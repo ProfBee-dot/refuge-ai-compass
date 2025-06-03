@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,9 +7,13 @@ import { useUser } from "@/hooks/useUserContext";
 import { ChatbotInterface } from "@/components/ChatbotInterface";
 import { AidRequestForm } from "@/components/AidRequestForm";
 import { DocumentUpload } from "@/components/DocumentUpload";
+import { usePWA } from "@/contexts/PWAContext";
+import { InstallDialogTrigger } from "@/components/InstallDialog";
 
 export const RefugeePortal = () => {
   const { user } = useUser();
+  
+  const { canBeInstalled, promptInstall } = usePWA();
 
   const urgentNeeds = [
     { id: 1, type: "Medical", description: "Emergency medical supplies needed", priority: "urgent", status: "pending" },
@@ -31,10 +34,15 @@ export const RefugeePortal = () => {
           <h2 className="text-2xl font-bold text-gray-900">Refugee Support Portal</h2>
           <p className="text-gray-600">Your personalized assistance dashboard</p>
         </div>
+        {
+          canBeInstalled && (
+            <InstallDialogTrigger />
+          )
+        }
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4 w-full z-20">
-        <TabsList className="fixed flex gap-3 px-2 py-5 shadow-md items-center justify-between left-0 bottom-0 md:grid md:p-0 w-full md:grid-cols-6 md:relative">
+      <Tabs defaultValue="overview" className="space-y-4 w-full">
+        <TabsList className="fixed flex gap-3 h-max z-20 p-2 shadow-md items-center justify-between left-0 bottom-0 md:grid md:relative md:p-0 w-full md:grid-cols-5">
           <TabsTrigger className="flex gap-1" value="overview">
             <Notebook className="w-5 flex-shrink-0 h-5 mr-1" />
             <span className="hidden md:block">

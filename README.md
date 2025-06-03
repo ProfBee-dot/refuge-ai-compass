@@ -1,149 +1,252 @@
+# 🌍 RefugeeAid: AI-Powered Humanitarian Platform
 
-# 🕊️ RefugeesAid
-
-Welcome to **RefugeesAid**, an AI-powered humanitarian aid platform designed to streamline refugee support, coordinate global resources, and enhance relief distribution across borders.
-
----
-
-## 📘 Documentation
-
-### 1. Overview
-
-**RefugeesAid** is an AI-powered platform that streamlines humanitarian aid delivery by connecting refugees with resources, volunteers, and donations. It provides a centralized dashboard for tracking refugee cases, fundraising progress, and resource distribution, while offering role-specific portals for Admins, Volunteers, Donors, and Refugees. It also creates a seamless process for the distribution of resources to both individuals and refugee camps.
+RefugeeAid is an AI-powered multilingual platform designed to assist refugees by intelligently coordinating fundraising, distributing critical supplies, and facilitating emotional, legal, and integration support—all in one agentic system. The platform connects NGOs, donors, volunteers, and refugees in real-time, with built-in support for offline operation in low-connectivity zones.
 
 ---
 
-### 2. Problem Statement
+## 🧨 Problem Statement
 
-In crisis situations, aid delivery to refugees is often delayed, inefficient, and lacks accountability due to fragmented systems, poor coordination, and lack of real-time data. Refugees face difficulties in accessing timely support, and donors struggle to track the impact of their contributions.
+Over 100 million people worldwide are currently displaced due to war, persecution, or climate disasters. Refugees often struggle to access:
 
----
+* Accurate and timely information about services.
+* Urgent and long-term supplies.
+* Mental health and legal support.
+* Pathways to integrate into host communities.
+* Equitable access to education and employment.
 
-### 3. Solution
-
-RefugeesAid leverages intelligent technology to manage, monitor, and optimize refugee aid activities globally. With integrated AI support, a secure platform, and tailored user roles, it provides transparency, efficiency, and accountability in humanitarian operations.
-
----
-
-### 4. Key App Features
-
-#### 🌐 Home Page
-- Mission statement and summary
-- Feature tiles: AI Assistant, Fundraising, Community Support
-- Real-time statistics: Active Cases, Funds Raised, Resources Delivered
-
-#### 🧑‍💼 Admin Panel
-- Platform analytics overview
-- Manage approvals, alerts, users, campaigns
-- Metrics: Pending cases, registered refugees, donations
-
-#### 🤝 Volunteer Portal
-- Dashboard for case tracking and regional insights
-- Alerts, delivery status, outreach monitoring
-
-#### 🔐 Donor Portal
-- Start/manage campaigns
-- Crypto & fiat donation tracking
-- Contribution impact metrics
-
-#### 🧍 Refugee Portal
-- AI chatbot for 24/7 assistance
-- Aid request submission and delivery status
-- Access to educational and health resources
+This disconnection results in inefficient aid delivery, unverified need requests, duplicated efforts, and prolonged hardship.
 
 ---
 
-### 5. Project Structure
+## 🚀 Solution
+
+RefugeeAid bridges the gap between need and aid by acting as a digital social agent that:
+
+* **AI-Powered Chat Support**: Provides multilingual, real-time assistance to refugees for navigating housing, education, healthcare, and legal systems.
+* **AI Agents for Aid Solicitation**: Automatically matches refugee needs with verified donor resources and solicits aid intelligently.
+* **Predictive Analytics**: Uses AI to forecast resource needs and optimize distribution.
+* **Offline AI Support**: Ensures emergency assistance and resource access even in low-connectivity zones.
+* Facilitates equitable distribution of funds and resources.
+* Offers credit and trust scoring to improve visibility to donors and agencies.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+
+* React (with TailwindCSS)
+* Service Workers and PWA (for offline and emergency aid)
+
+### Backend
+
+* FastAPI
+* Supabase (Database + Authentication)
+
+### AI & Machine Learning
+
+* **[AI MODEL]** for chat-based refugee support and aid solicitation.
+* **Google Translate API** for multilingual interactions.
+* **Predictive AI Models** for resource allocation and need forecasting.
+
+---
+
+## 🌟 Key Features
+
+### 🌐 Home Page
+
+* Mission statement and platform summary.
+* Feature highlights: AI Assistant, Fundraising, Community Support, Secure Platform.
+* Live statistics: Active Cases, Funds Raised, Resources Delivered.
+* Call-to-action for new users.
+
+### 🧑‍💼 Admin Panel
+
+* Overview of platform analytics.
+* Manage approvals, alerts, users, and campaigns.
+* Metrics: Pending approvals, active campaigns, registered refugees, critical alerts.
+* Analytics: User satisfaction and response times.
+* **AI-Driven Insights**: Predictive analytics for resource planning and impact measurement.
+
+### 🤝 Volunteer Portal
+
+* Dashboard for case tracking and regional impact.
+* Real-time updates: New cases, donations, deliveries, alerts.
+* Visual insights on regional activity (Middle East, Europe, Africa).
+* **AI Recommendations**: Suggests optimal resource allocation and volunteer assignments.
+
+### 🔐 Donor Portal
+
+* Launch/manage fundraising campaigns.
+* View donation history.
+* Track the impact of contributions.
+* Smart Campaign Filter.
+* Crypto Wallet to manage donations.
+* **AI Transparency Reports**: Provides donors with detailed insights into the impact of their contributions.
+
+### 🧍 Refugee Portal
+
+* **AI Chat-Based Assistance**: Multilingual support for submitting aid requests and navigating resources.
+* Monitor delivery status.
+* Access support resources.
+* **Offline AI Support**: Ensures access to critical information even in low-connectivity areas.
+
+### Offline and Emergency Support
+
+* PWA Mode enables access to last synced data (requests, maps, legal resources).
+* Data syncs automatically when reconnected.
+* Emergency responses prioritized and stored locally.
+* **AI-Driven Emergency Alerts**: Automatically identifies and prioritizes critical cases.
+
+---
+
+## 🔒 Role-Based Access Control (RBAC)
+
+* **Admin**: Full access to all system operations and analytics.
+* **Volunteer**: Manage cases, deliveries, and regional outreach.
+* **Donor**: Fund and monitor humanitarian campaigns.
+* **Refugee**: Receive support, chat with AI assistant, request aid.
+
+---
+
+## 🚀 Quick Start Guide
+
+### Prerequisites
+
+* Node.js ≥ 18
+* PostgreSQL ≥ 14
+
+### Clone the Repository
 
 ```bash
-/
-├── frontend/           # React + Tailwind interface
-├── backend/            # Node.js + Express API
-├── ai-assistant/       # GPT integration for support bot
-├── public/             # Assets and static files
-├── database/           # MongoDB schema and services
-└── README.md
+git clone https://github.com/your-org/refugeaid.git
+cd refugeaid
 ```
 
----
-
-### 6. Technologies Used
-
-- **Frontend**: React.js, TailwindCSS, shadcn-ui
-- **Backend**: Node.js, Express
-- **Database**: MongoDB / Firebase
-- **AI**: GPT-based AI Assistant
-- **Auth**: Role-based Secure Login
-- **Deployment**: Lovable + GitHub Actions
-
----
-
-### 7. Screens
-
-| Home | Volunteer | Refugee | Donor | Admin |
-|------|-----------|---------|-------|--------|
-| ![Home](https://github.com/user-attachments/assets/b4e1d2b7-9dd2-46b5-8ed8-130881392f15) | ![Volunteer](https://github.com/user-attachments/assets/3fe71f7a-c2db-42ff-ac94-9e9d8ea3e92b) | ![Refugee](https://github.com/user-attachments/assets/0b79885c-8697-4b8c-80f8-3ce78d1fcb17) | ![Donor](https://github.com/user-attachments/assets/ac6db782-0030-422f-92d7-8552e1e11992) | ![Admin](https://github.com/user-attachments/assets/b9588164-5a85-41de-9b89-d220937659d1) |
-
----
-
-### 8. Future Roadmap
-
-- 📱 Mobile App integration (React Native)
-- 🌍 Multilingual support
-- 🧠 Advanced AI recommendations for aid prioritization
-- 🔗 Blockchain ledger for donation transparency
-- 🤝 NGO collaboration APIs
-
----
-
-### 9. Hackathon Submission
-
-**Hackathon**: [Insert Hackathon Name]  
-**Team**: RefugeesAid Core  
-**Submission URL**: [Lovable Project](https://lovable.dev/projects/0280d5ef-2fe1-4a71-a152-191cd07b539e)  
-**Demo Video**: _[Insert Video Link]_
-
----
-
-### 🔧 How to Run the Project
+### Install Dependencies
 
 ```bash
-# Clone repository
-git clone <YOUR_GIT_URL>
-cd <YOUR_PROJECT_NAME>
-
-# Install dependencies
 npm install
+```
 
-# Start development server
+### Environment Setup
+
+Create a `.env.local` file and include:
+
+```
+DATABASE_URL=
+SUPABASE_CONFIG=
+OPENAI_API_KEY=
+GOOGLE_TRANSLATE_API_KEY=
+```
+
+### Database Setup
+
+```bash
+npx prisma migrate dev --name init
+```
+
+### Start Development Server
+
+```bash
 npm run dev
 ```
 
-Alternatively, use [Lovable](https://lovable.dev/projects/0280d5ef-2fe1-4a71-a152-191cd07b539e) for visual editing and live preview.
+---
+
+## 📋 Test Accounts
+
+| Role      | Email                                                 | Password    |
+| --------- | ----------------------------------------------------- | ----------- |
+| Volunteer | [test.volunteer@mail.com](mailto:test.volunteer@mail.com) | password123 |
+| Refugee   | [test.refugee@mail.com](mailto:test.refugee@mail.com)   | password123 |
+| NGO       | [test.ngo@mail.com](mailto:test.ngo@mail.com)           | password123 |
+| Donor     | [test.donor@mail.com](mailto:test.donor@mail.com)       | password123 |
 
 ---
 
-### ✨ Acknowledgments
+## 🎥 Demo & Resources
 
-We thank all hackathon organizers, mentors, and partners who supported this project. Special appreciation goes to the refugee communities whose needs inspired this solution.
+### 📹 Video Demo
 
----
+[Watch Demo on YouTube](https://www.youtube.com/refugeaid-demo)
 
-### 👥 Contributors
+### 📊 Pitch Deck
 
-- **Product Design**: Adebisi Jethro  
-- **Frontend Development**: David Uwagbale  
-- **Backend Development**: Zoaka Bata Bukar  
-- **AI Integration**: Keshinro Mus'ab  
-- **Project Lead**: Alfred Itodole
+[View Pitch Deck (Google Slides)](https://docs.google.com/presentation/d/REFUGEAID-PITCH)
 
----
+### 🌐 Live Application
 
-### 📌 Project Info
-
-- **Live URL**: [Lovable Project](https://lovable.dev/projects/0280d5ef-2fe1-4a71-a152-191cd07b539e)
-- **Technologies**: React, Vite, Tailwind, GPT, MongoDB, Node.js
+[Try the App](https://refugeaid.vercel.app)
 
 ---
 
+## 🏗️ Project Structure
 
+```
+/app              - React app
+/components       - Reusable UI components
+/utils            - Helper functions
+/supabase         - Prisma schema and DB logic
+/api              - REST & RPC endpoints
+/local_cache      - Offline data cache (for PWAs)
+```
+
+---
+
+## 🌍 Language Switching
+
+Users can change languages at any point via the floating language selector. All backend messages are auto-translated using Google Translate API with fallback to English.
+
+---
+
+## 🔒 Security & Privacy
+
+* All data encrypted in-transit (HTTPS).
+* Refugees control visibility of sensitive data (e.g., identity docs).
+* Anonymous reporting supported.
+* Offline data cached with local encryption.
+
+---
+
+## 🎯 Impact & Metrics
+
+### Target Audience
+
+* Displaced refugees.
+* NGOs and humanitarian organizations.
+* Donors and volunteers.
+* Government support agencies.
+
+### Expected Outcomes
+
+* Faster and more targeted resource allocation.
+* Reduced aid duplication and fraud.
+* Improved mental health via supportive agents.
+* Better integration through employment, legal, and education pathways.
+
+---
+
+## 🚀 Future Roadmap
+
+* 🧠 Federated AI agents for hyperlocal knowledge.
+* 🤝 Blockchain transparency layer for aid tracking.
+* 📸 Image/video-based damage reporting (computer vision).
+
+---
+
+## 🙏 Acknowledgments
+
+* Hackathon organizers and mentors.
+* Refugees and volunteers who shared their stories.
+
+---
+
+## Contributors
+
+* **Product Design**: Adebisi Jethro.
+* **Frontend Development**: David Uwagbale.
+* **Backend Development**: Zoaka Bata Bukar.
+* **AI Integration**: Keshinro Mus'ab.
+
+**Project Lead**: Alfred Itodole.

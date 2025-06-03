@@ -45,7 +45,7 @@ export const AdminPortal = () => {
   };
 
   return (
-    <div className="space-y-6 w-full anime-start min-h-screen p-4 md:px-6">
+    <div className="space-y-6 w-full min-h-screen p-4 md:px-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Admin Control Panel</h2>
@@ -60,8 +60,8 @@ export const AdminPortal = () => {
       </div>
 
 
-      <Tabs defaultValue="overview" className="space-y-4 w-full z-20">
-        <TabsList className="fixed flex gap-3 px-2 py-5 shadow-md items-center justify-between left-0 bottom-0 md:grid md:p-0 w-full md:grid-cols-6 md:relative">
+      <Tabs defaultValue="overview" className="space-y-4 w-full">
+        <TabsList className="fixed flex z-20 h-max gap-3 p-2 shadow-md items-center justify-between left-0 bottom-0 md:grid md:p-0 w-full md:grid-cols-5 md:relative">
           <TabsTrigger className="flex gap-1" value="overview">
             <TrendingUpIcon className="w-5 flex-shrink-0 h-5 mr-1" />
             <span className="hidden md:block">
@@ -86,7 +86,7 @@ export const AdminPortal = () => {
               User Management
             </span>
           </TabsTrigger>
-          <TabsTrigger className="flex gap-1" value="users">
+          <TabsTrigger className="flex gap-1" value="campaigns">
             <Package className="w-5 flex-shrink-0 h-5 mr-1" />
             <span className="hidden md:block">
               Campaigns
