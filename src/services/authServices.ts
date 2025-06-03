@@ -94,6 +94,7 @@ export const signOutUser = async () => {
   }
 };
 
+//update user
 export const updateUserProfile = async (userId: string, userData: Partial<User>) => {
   if (!isSupabaseConfigured) {
     throw new Error('Supabase not configured');
