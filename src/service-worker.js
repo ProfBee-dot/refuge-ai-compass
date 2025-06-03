@@ -32,9 +32,10 @@ async function cacheAssets() {
     
       // Match emergency JS dynamically
       const manifest = await fetch('/.vite/manifest.json').then(r => r.json());
-      const emergencyJs = Object.values(manifest).find((asset) =>
-        asset.file?.startsWith('assets/emergency-main-')
-      )?.file;
+      const emergencyEntry = Object.keys(manifest).find((asset) =>
+        asset === "offline.html"
+      );
+      const emergencyJs = manifest[emergencyEntry]?.file;
 
       const urlsToCache = [
         '/offline.html',
