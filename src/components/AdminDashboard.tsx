@@ -27,7 +27,7 @@ export const AdminDashboard = () => {
           <h2 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
             Admin Dashboard
           </h2>
-          <p className="text-gray-600 mt-1">Manage and monitor the RefugeeAI platform</p>
+          <p className="text-gray-600 mt-1">Manage and monitor the RefugeeAid platform</p>
         </div>
         <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 px-3 py-1">
           <Shield className="w-4 h-4 mr-1" />

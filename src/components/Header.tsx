@@ -13,7 +13,8 @@ export const Header = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const { isLoggedIn } = useUser();
   
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const currentLang =  document.getElementsByTagName("html")[0].getAttribute("lang") ?? "en";
+  const [selectedLanguage, setSelectedLanguage] = useState(currentLang || "en");
 
   const languages = [
     { code: "en", name: "English" },
@@ -34,10 +35,10 @@ export const Header = () => {
               </svg>
             </div> */}
             <div className="w-8 h-8 rounded-lg flex items-center justify-center hover:shadow-lg transition-all duration-300">
-              <img src="/logo.png" alt="RefugeeAI Logo" style={{objectFit: "cover"}} className="w-6 h-6" />
+              <img src="/logo.png" alt="RefugeeAid Logo" style={{objectFit: "cover"}} className="w-6 h-6" />
             </div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              RefugeeAI
+              RefugeeAid
             </h1>
           </div>
           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 hover:bg-green-100 transition-colors animate-pulse">
@@ -96,8 +97,10 @@ export const Header = () => {
 };
 
 
+const host = import.meta.env.VITE_HOST || "https://refuge-ai-compass-47.vercel.app";
+
 function translatePage(languageCode: string) {
-  const url = new URL(window.location.href);
+  const url = new URL(host + window.location.pathname);
   url.searchParams.set('hl', languageCode);
   
   // Redirect to Google Translate with the selected language

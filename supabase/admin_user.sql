@@ -17,7 +17,7 @@ INSERT INTO public.user_profiles (
   'admin@refugeeai.com',
   'System Administrator',
   'admin',
-  'RefugeeAI Platform',
+  'RefugeeAid Platform',
   true,
   NOW(),
   NOW()
@@ -25,7 +25,7 @@ INSERT INTO public.user_profiles (
   role = 'admin',
   verified = true,
   full_name = 'System Administrator',
-  organization = 'RefugeeAI Platform';
+  organization = 'RefugeeAid Platform';
 
 -- Create additional test users for different roles
 INSERT INTO public.user_profiles (

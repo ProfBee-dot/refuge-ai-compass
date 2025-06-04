@@ -3,7 +3,10 @@
 RefugeeAid is an AI-powered multilingual platform designed to assist refugees by intelligently coordinating fundraising, distributing critical supplies, and facilitating emotional, legal, and integration support—all in one agentic system. The platform connects NGOs, donors, volunteers, and refugees in real-time, with built-in support for offline operation in low-connectivity zones.
 
 
-[View live](https://refuge-ai-compass.vercel.app)
+[![Demo](https://img.shields.io/badge/🎥_Live_Demo-Watch_Now-blue?style=for-the-badge)](https://youtu.be/lsFeSM_KoHE)
+[![Pitch Deck](https://img.shields.io/badge/📊_Pitch_Deck-View_Slides-blue?style=for-the-badge)](submission_materials/pitch_deck.pdf)
+[![Live App](https://img.shields.io/badge/🚀_Try_App-Live_Version-blue?style=for-the-badge)](https://refuge-ai-compass.vercel.app)
+
 
 ---
 
@@ -40,6 +43,8 @@ RefugeeAid bridges the gap between need and aid by acting as a digital social ag
 
 * React (with TailwindCSS)
 * Service Workers and PWA (for offline and emergency aid)
+* TypeScript (Type-safe development)
+* Shadcn/ui (Modern component library)
 
 ### Backend
 
@@ -47,10 +52,11 @@ RefugeeAid bridges the gap between need and aid by acting as a digital social ag
 * Supabase (Database + Authentication)
 
 ### AI & Machine Learning
-
-* **[AI MODEL]** for chat-based refugee support and aid solicitation.
+* **Pure ANN** to estimate displaced people based on current economic factors and natural events
+* **Prophet for forecasting resource depletion in foreign camps**.
+* **Cosine Similarity** to match donors with organizations
 * **Google Translate API** for multilingual interactions.
-* **Predictive AI Models** for resource allocation and need forecasting.
+* **Reddit Bot** For automated publicity and soliciting for aid
 
 ---
 
@@ -113,9 +119,22 @@ RefugeeAid bridges the gap between need and aid by acting as a digital social ag
 ---
 
 ## Use Guide
-!(screenshots/home-screenshot)
+- The landing page for the website
+![home view](submission_materials/home-screenshot.jpg)
 
-!(screenshots/chat-screenshot)
+- User can sign in (test accounts for different roles)
+![sigin view](submission_materials/signin-screenshot.jpg)
+
+- After signin refugees can use the chat feature with case suggestions to speed up info getting in case of emergencies
+![chat view](submission_materials/chat-screenshot.jpg)
+
+- Based on User sign in and registered roles, access to other portals are controlled
+![portals view](submission_materials/portals-screenshot.jpg)
+
+- Internationalisation and multi-language support and language conversions
+![Internationalisation view](submission_materials/intn-screenshot.jpg)
+
+
 
 ### Registration and Login 
 Users sign in and have privileges and access based on their roles.
@@ -143,8 +162,8 @@ When Offline or in case of poor connection access to last Retrieved important in
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/davidtimi1/refuge-ai-compass-47.git
-cd refuge-ai-compass-47
+git clone https://github.com/ProfBee-dot/refuge-ai-compass.git
+cd refuge-ai-compass
 ```
 
 ### Install Dependencies
@@ -184,7 +203,7 @@ npm run dev
 | --------- | ----------------------------------------------------- | ----------- |
 | Volunteer | [test.volunteer@mail.com](mailto:test.volunteer@mail.com) | password123 |
 | Refugee   | [test.refugee@mail.com](mailto:test.refugee@mail.com)   | password123 |
-| NGO       | [test.ngo@mail.com](mailto:test.ngo@mail.com)           | password123 |
+| Admin       | [test.ngo@mail.com](mailto:test.admin@mail.com)           | password123 |
 | Donor     | [test.donor@mail.com](mailto:test.donor@mail.com)       | password123 |
 
 ---
@@ -192,9 +211,9 @@ npm run dev
 ## 🎥 Demo & Resources
 
 ### 📸 Screenshots
-![portals view](screenshots/portals-screenshot.jpg)
-![home view](screenshots/home-screenshot.jpg)
-![chat view](screenshots/chat-screenshot.jpg)
+![portals view](submission_materials/portals-screenshot.jpg)
+![home view](submission_materials/home-screenshot.jpg)
+![chat view](submission_materials/chat-screenshot.jpg)
 
 ### 📹 Video Demo
 
@@ -202,7 +221,8 @@ npm run dev
 
 ### 📊 Pitch Deck
 
-[View Pitch Deck (Google Slides)](screenshots/pitch-deck.pdf)
+[View Pitch Deck (PDF)](submission_materials/pitch_deck.pdf)
+[View Pitch Deck (Slides)](submission_materials/pitch_deck.ppt)
 
 ### 🌐 Live Application
 

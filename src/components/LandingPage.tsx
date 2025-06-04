@@ -109,7 +109,7 @@ export const LandingPage = () => {
                 Ready to Make a Difference?
               </h3>
               <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                Join thousands of volunteers, donors, and organizations using RefugeeAI 
+                Join thousands of volunteers, donors, and organizations using RefugeeAid
                 to create meaningful impact in refugee communities worldwide.
               </p>
               <Button 

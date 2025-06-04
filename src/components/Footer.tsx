@@ -9,7 +9,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">About Us</h3>
             <p className="text-sm">
-              Refuger Aid is dedicated to providing innovative solutions for global challenges. Learn more about our mission and values.
+              RefugeeAid is dedicated to providing innovative solutions for global challenges. Learn more about our mission and values.
             </p>
           </div>
           {/* Section: Sitemap */}

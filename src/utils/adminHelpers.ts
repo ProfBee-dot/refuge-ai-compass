@@ -30,7 +30,7 @@ export const createAdminUser = async (email: string, password: string, fullName:
           email: signUpData.user.email,
           full_name: fullName,
           role: 'admin',
-          organization: 'RefugeeAI Platform',
+          organization: 'RefugeeAid Platform',
           verified: true,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
@@ -60,7 +60,7 @@ export const promoteToAdmin = async (userEmail: string) => {
       .update({ 
         role: 'admin', 
         verified: true,
-        organization: 'RefugeeAI Platform',
+        organization: 'RefugeeAid Platform',
         updated_at: new Date().toISOString(),
       })
       .eq('email', userEmail);
@@ -86,7 +86,7 @@ export const createTestUsers = async () => {
       password: 'RefugeeAdmin123!',
       name: 'System Administrator',
       role: 'admin',
-      organization: 'RefugeeAI Platform'
+      organization: 'RefugeeAid Platform'
     },
     {
       email: 'volunteer@refugeeai.com',
