@@ -32,9 +32,10 @@ async function cacheAssets() {
     
       // Match emergency JS dynamically
       const manifest = await fetch('/.vite/manifest.json').then(r => r.json());
-      const emergencyJs = Object.values(manifest).find((asset) =>
-        asset.file?.startsWith('assets/emergency-main-')
-      )?.file;
+      const emergencyEntry = Object.keys(manifest).find((asset) =>
+        asset === "offline.html"
+      );
+      const emergencyJs = manifest[emergencyEntry]?.file;
 
       const urlsToCache = [
         '/offline.html',
@@ -59,12 +60,14 @@ self.addEventListener('install', (event) => {
 
 
 self.addEventListener('fetch', (event) => {
-    // We only want to call event.respondWith() if this is a navigation request
-    // for an HTML page.
     const {request} = event;
     event.respondWith(
-      fetch(request).catch(() =>
-        caches.match(OFFLINE_URL)
+      fetch(request).catch(async() => {
+        const cachedResponse = await caches.match(request);
+        const offlineView = await caches.match(OFFLINE_URL);
+
+        return cachedResponse ?? offlineView;
+      }
       )
     );
 

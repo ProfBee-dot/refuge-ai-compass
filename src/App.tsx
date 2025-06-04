@@ -3,18 +3,22 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { LandingPage } from "./components/LandingPage";
+import Index from "./pages/Index";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserProvider } from "@/contexts/UserContext";
-import Index from "./pages/Index";
-import WorldView from "./pages/WorldView";
-import RefugeePortal from "./pages/RefugeePortal";
-import DonorPortal from "./pages/DonorPortal";
-import AdminPortal from "./pages/AdminPortal";
 import NotFound from "./pages/NotFound";
 import { Header } from "./components/Header";
-import { LandingPage } from "./components/LandingPage";
+import { lazy, Suspense } from "react";
+import { LoadingPage } from "./components/Loading";
 
 const queryClient = new QueryClient();
+
+const WorldView = lazy(() => import('./pages/WorldView'))
+const RefugeePortal = lazy(() => import('./pages/RefugeePortal'))
+const DonorPortal = lazy(() => import('./pages/DonorPortal'))
+const AdminPortal = lazy(() => import('./pages/AdminPortal'))
+
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -26,11 +30,32 @@ const App = () => (
           <Header />
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/world" element={<WorldView />} />
             <Route path="/portals" element={<Index />} />
-            <Route path="/refugee-portal" element={<RefugeePortal />} />
-            <Route path="/donor-portal" element={<DonorPortal />} />
-            <Route path="/admin-portal" element={<AdminPortal />} />
+
+            <Route path="/world" element={
+              <Suspense fallback={<LoadingPage />}>
+                <WorldView />
+              </Suspense>
+            } />
+
+            <Route path="/refugee-portal" element={
+              <Suspense fallback={<LoadingPage />}>
+                <RefugeePortal />
+              </Suspense>
+            } />
+
+            <Route path="/donor-portal" element={
+              <Suspense fallback={<LoadingPage />}>
+                <DonorPortal />
+              </Suspense>
+            } />
+
+            <Route path="/admin-portal" element={
+              <Suspense fallback={<LoadingPage />}>
+                <AdminPortal />
+              </Suspense>
+            } />
+            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
