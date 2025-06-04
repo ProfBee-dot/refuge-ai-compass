@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Refugee Feedback App</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f7ff;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      background-color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+    }
+    .header .logo {
+      color: #007bff;
+      font-size: 24px;
+    }
+    .header .nav a {
+      color: #007bff;
+      margin-left: 15px;
+      text-decoration: none;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const App = () => {
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        fetch('http://localhost:5000/submit', {
+          method: 'POST',
+          body: formData
+        }).then(response => response.json())
+          .then(data => alert(data.message));
+      };
+
+      return (
+        <div>
+          <div className="header">
+            <div className="logo">RefugeeAI</div>
+            <div className="nav">
+              <a href="#">ENGLISH</a>
+              <a href="#">Sign In</a>
+            </div>
+          </div>
+          <div className="container">
+            <h1>Empowering Refugee Support Through AI Technology</h1>
+            <p>Provide your feedback to help us improve support services.</p>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <div className="form-group">
+                <label>Name</label>
+                <input type="text" name="name" required />
+              </div>
+              <div className="form-group">
+                <label>Gender</label>
+                <select name="gender" required>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Age</label>
+                <input type="number" name="age" required />
+              </div>
+              <div className="form-group">
+                <label>Feedback for Feeding</label>
+                <textarea name="feeding_feedback" required></textarea>
+              </div>
+              <div className="form-group">
+                <label>Feedback for Shelter</label>
+                <textarea name="shelter_feedback" required></textarea>
+              </div>
+              <div className="form-group">
+                <label>Feedback on Personnel</label>
+                <textarea name="personnel_feedback" required></textarea>
+              </div>
+              <div className="form-group">
+                <label>Feedback on Environment</label>
+                <textarea name="environment_feedback" required></textarea>
+              </div>
+              <div className="form-group">
+                <label>Medical Feedback</label>
+                <textarea name="medical_feedback" required></textarea>
+              </div>
+              <div className="form-group">
+                <label>Employment Status</label>
+                <select name="employment_status" required>
+                  <option value="Employed">Employed</option>
+                  <option value="Unemployed">Unemployed</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Marital Status</label>
+                <select name="marital_status" required>
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Camp Location</label>
+                <input type="text" name="camp_location" required />
+              </div>
+              <button type="submit">Submit Feedback</button>
+            </form>
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
